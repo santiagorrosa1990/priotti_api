@@ -1,8 +1,8 @@
-package com.mycompany.mavenproject1.Item;
+package com.santiago.priotti_web.Item;
 
 import com.google.inject.Inject;
-import com.mycompany.mavenproject1.Interfaces.Controller;
-import com.mycompany.mavenproject1.Interfaces.Service;
+import com.santiago.priotti_web.Interfaces.Controller;
+import com.santiago.priotti_web.Interfaces.Service;
 import spark.Request;
 import spark.Response;
 

@@ -6,7 +6,7 @@
 package com.santiago.priotti_web;
 
 import com.google.inject.Inject;
-import com.mycompany.mavenproject1.Interfaces.Controller;
+import com.santiago.priotti_web.Interfaces.Controller;
 import static spark.Spark.get;
 
 /**

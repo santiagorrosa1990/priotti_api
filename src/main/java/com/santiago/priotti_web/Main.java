@@ -2,7 +2,7 @@ package com.santiago.priotti_web;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.mycompany.mavenproject1.Injector.ConfigModule;
+import com.santiago.priotti_web.Injector.ConfigModule;
 
 public class Main {
 

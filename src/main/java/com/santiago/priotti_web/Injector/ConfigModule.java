@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.mavenproject1.Injector;
+package com.santiago.priotti_web.Injector;
 
 import com.google.inject.AbstractModule;
-import com.mycompany.mavenproject1.Interfaces.Controller;
-import com.mycompany.mavenproject1.Interfaces.Service;
-import com.mycompany.mavenproject1.Item.ItemController;
-import com.mycompany.mavenproject1.Item.ItemService;
+import com.santiago.priotti_web.Interfaces.Controller;
+import com.santiago.priotti_web.Interfaces.Service;
+import com.santiago.priotti_web.Item.ItemController;
+import com.santiago.priotti_web.Item.ItemService;
 
 /**
  *

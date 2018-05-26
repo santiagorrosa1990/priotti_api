@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.mavenproject1.Item;
+package com.santiago.priotti_web.Item;
 
 import com.google.gson.Gson;
-import com.mycompany.mavenproject1.Interfaces.Service;
-import com.mycompany.mavenproject1.MySql.MySqlConnector;
-import com.mycompany.mavenproject1.StandardResponse.StandardResponse;
-import com.mycompany.mavenproject1.StandardResponse.StatusResponse;
+import com.santiago.priotti_web.Interfaces.Service;
+import com.santiago.priotti_web.MySql.MySqlConnector;
+import com.santiago.priotti_web.StandardResponse.StandardResponse;
+import com.santiago.priotti_web.StandardResponse.StatusResponse;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;

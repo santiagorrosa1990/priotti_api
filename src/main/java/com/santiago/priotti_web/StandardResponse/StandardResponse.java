@@ -1,6 +1,4 @@
-package com.mycompany.mavenproject1.StandardResponse;
-
-import com.google.gson.JsonElement;
+package com.santiago.priotti_web.StandardResponse;
 
 public class StandardResponse<T> {
 
