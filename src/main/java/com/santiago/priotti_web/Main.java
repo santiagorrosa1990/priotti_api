@@ -1,4 +1,4 @@
-package com.mycompany.priotti_web;
+package com.santiago.priotti_web;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
