@@ -6,6 +6,8 @@
 package com.santiago.priotti_web.Item;
 
 import com.google.gson.Gson;
+import com.google.inject.Inject;
+import com.santiago.priotti_web.Interfaces.Dao;
 import com.santiago.priotti_web.Interfaces.Service;
 import com.santiago.priotti_web.MySql.MySqlConnector;
 import com.santiago.priotti_web.StandardResponse.StandardResponse;
@@ -18,52 +20,41 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ItemService extends MySqlConnector implements Service {
-    public static final int LIMIT = 100;
+
+    private final Dao itemDao;
+    
+
+    @Inject
+    public ItemService(Dao itemDao) {
+        this.itemDao = itemDao;
+    }
 
     @Override
     public String getAll() {
-        Map<String, Map> itemList = new HashMap<>();
+        List<Item> itemList;
         try {
-            Statement st = connect();
-            ResultSet rs = st.executeQuery("SELECT * FROM productos LIMIT "+LIMIT);
-            while (rs.next()) {
-                Map<String, String> item = new HashMap<>();
-                item.put("codigo", rs.getString("codigo").trim());
-                item.put("aplicacion", rs.getString("aplicacion").trim());
-                item.put("rubro", rs.getString("rubro").trim());
-                item.put("marca", rs.getString("marca").trim());
-                itemList.put(rs.getString("codigo").trim(), item);
-            }
-        } catch (SQLException e) {
-            return "DB EXCEPTION: " + e.getMessage();
+            itemList = itemDao.get();
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, itemList));
+        } catch (SQLException ex) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: "+ex.getMessage()));
         }
-
-        return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, itemList));
-
     }
 
-    public static String getAllAsDatatablesFormat() {
-        List<List<String>> itemList = new ArrayList<>();
+    public String getAllAsDatatablesFormat() {
+        List<List<String>> dtItemList = new ArrayList();
         try {
-            Statement st = connect();
-            ResultSet rs = st.executeQuery("SELECT * FROM productos LIMIT "+LIMIT);
-            while (rs.next()) {
-                itemList.add(Arrays.asList(
-                        rs.getString("codigo").trim(),
-                        rs.getString("aplicacion").trim(),
-                        rs.getString("rubro").trim(),
-                        rs.getString("marca").trim()
-                ));
+            List<Item> itemList = itemDao.get() ;
+            for(Item item : itemList){
+                dtItemList.add(Arrays.asList(item.getCodigo(), item.getAplicacion(), item.getRubro(), item.getMarca()));
             }
-            close();
-        } catch (SQLException e) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "ERROR DB: "+e.getMessage()));
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, dtItemList));
+        } catch (SQLException ex) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: "+ex.getMessage()));
         }
-        return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, itemList));
     }
-    
-    //public static String get
 
 }

@@ -7,19 +7,19 @@ import spark.Request;
 import spark.Response;
 
 public class ItemController implements Controller {
-    
+
     private final Service itemService;
 
     @Inject
     public ItemController(Service itemService) {
         this.itemService = itemService;
     }
-    
-    
+
     @Override
     public String getAll(Request request, Response response) {
         response.type("application/json");
-        return itemService.getAll();
+        //return itemService.getAll();
+        return itemService.getAllAsDatatablesFormat();
     }
 
 //    public static String addPersona(spark.Request request, spark.Response response) throws IOException {

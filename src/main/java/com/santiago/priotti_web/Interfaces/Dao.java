@@ -5,15 +5,17 @@
  */
 package com.santiago.priotti_web.Interfaces;
 
+import java.sql.SQLException;
+import java.util.List;
+
 /**
  *
  * @author santiago
  * @param <T>
  */
-public interface Service {
-
-    public String getAll();
+public interface Dao<T> {
     
-    public String getAllAsDatatablesFormat();
-
+    
+    public List<T> get() throws SQLException;
+    
 }
