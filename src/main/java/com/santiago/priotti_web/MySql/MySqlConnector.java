@@ -20,7 +20,7 @@ public class MySqlConnector {
 
     private static Connection connect = null;
     private static Statement statement = null;
-    private static final String USER = "SANTIAGO";
+    private static final String USER = "root";
     private static final String PASS = "Tato1432";
 
     protected static Statement connect() throws SQLException {

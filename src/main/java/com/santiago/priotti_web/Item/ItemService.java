@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ItemService extends MySqlConnector implements Service {
 
@@ -45,12 +46,10 @@ public class ItemService extends MySqlConnector implements Service {
     }
 
     public String getAllAsDatatablesFormat() {
-        List<List<String>> dtItemList = new ArrayList();
+        List<List<String>> dtItemList;
         try {
             List<Item> itemList = itemDao.get() ;
-            for(Item item : itemList){
-                dtItemList.add(Arrays.asList(item.getCodigo(), item.getAplicacion(), item.getRubro(), item.getMarca()));
-            }
+            dtItemList = itemList.stream().map(item -> Arrays.asList(item.getCodigo(), item.getAplicacion(), item.getRubro(), item.getMarca())).collect(Collectors.toList());
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, dtItemList));
         } catch (SQLException ex) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: "+ex.getMessage()));
