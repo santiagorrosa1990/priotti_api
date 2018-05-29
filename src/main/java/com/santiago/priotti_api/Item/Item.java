@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.santiago.priotti_web.Item;
+package com.santiago.priotti_api.Item;
 
 import java.math.BigDecimal;
 import java.util.Date;

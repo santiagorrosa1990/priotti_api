@@ -3,15 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.santiago.priotti_web.Interfaces;
+package com.santiago.priotti_api.Interfaces;
 
 /**
  *
  * @author santiago
  * @param <T>
  */
-public interface Controller {
+public interface Service {
+
+    public String getAll();
     
-    public String getAll(spark.Request request, spark.Response response);
-    
+    public String getAllAsDatatablesFormat();
+
 }

@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.santiago.priotti_web.Injector;
+package com.santiago.priotti_api.Injector;
 
 import com.google.inject.AbstractModule;
-import com.santiago.priotti_web.Interfaces.Controller;
-import com.santiago.priotti_web.Interfaces.Service;
-import com.santiago.priotti_web.Item.ItemController;
-import com.santiago.priotti_web.Item.ItemService;
+import com.santiago.priotti_api.Interfaces.Controller;
+import com.santiago.priotti_api.Interfaces.Dao;
+import com.santiago.priotti_api.Interfaces.Service;
+import com.santiago.priotti_api.Item.ItemController;
+import com.santiago.priotti_api.Item.ItemDao;
+import com.santiago.priotti_api.Item.ItemService;
 
 /**
  *
@@ -19,10 +21,10 @@ public class ConfigModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        
+
         bind(Service.class).to(ItemService.class);
         bind(Controller.class).to(ItemController.class);
-        
+        bind(Dao.class).to(ItemDao.class);
     }
 
 }
