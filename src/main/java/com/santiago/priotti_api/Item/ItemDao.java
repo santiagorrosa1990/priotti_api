@@ -3,17 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.santiago.priotti_web.Item;
+package com.santiago.priotti_api.Item;
 
-import com.santiago.priotti_web.Interfaces.Dao;
-import com.santiago.priotti_web.MySql.MySqlConnector;
+import com.santiago.priotti_api.Interfaces.Dao;
+import com.santiago.priotti_api.MySql.MySqlConnector;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *

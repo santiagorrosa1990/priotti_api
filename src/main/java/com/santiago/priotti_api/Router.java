@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.santiago.priotti_web;
+package com.santiago.priotti_api;
 
 import com.google.inject.Inject;
-import com.santiago.priotti_web.Interfaces.Controller;
-import static spark.Spark.get;
+import com.santiago.priotti_api.Interfaces.Controller;
+import static spark.Spark.*;
 
 /**
  *
@@ -26,6 +26,11 @@ public class Router {
 
         get("/item", (request, response) -> {
             return itemController.getAll(request, response);
+        });
+
+        post("/prueba", (request, response) -> {
+            System.out.println(request.body());
+            return "Ok";
         });
 
         //        post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {

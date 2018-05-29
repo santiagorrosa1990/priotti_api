@@ -3,25 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.santiago.priotti_web.Item;
+package com.santiago.priotti_api.Item;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
-import com.santiago.priotti_web.Interfaces.Dao;
-import com.santiago.priotti_web.Interfaces.Service;
-import com.santiago.priotti_web.MySql.MySqlConnector;
-import com.santiago.priotti_web.StandardResponse.StandardResponse;
-import com.santiago.priotti_web.StandardResponse.StatusResponse;
-import java.sql.ResultSet;
+import com.santiago.priotti_api.Interfaces.Dao;
+import com.santiago.priotti_api.Interfaces.Service;
+import com.santiago.priotti_api.MySql.MySqlConnector;
+import com.santiago.priotti_api.StandardResponse.StandardResponse;
+import com.santiago.priotti_api.StandardResponse.StatusResponse;
+
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ItemService extends MySqlConnector implements Service {

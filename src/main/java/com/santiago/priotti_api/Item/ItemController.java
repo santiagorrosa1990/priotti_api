@@ -1,8 +1,8 @@
-package com.santiago.priotti_web.Item;
+package com.santiago.priotti_api.Item;
 
 import com.google.inject.Inject;
-import com.santiago.priotti_web.Interfaces.Controller;
-import com.santiago.priotti_web.Interfaces.Service;
+import com.santiago.priotti_api.Interfaces.Controller;
+import com.santiago.priotti_api.Interfaces.Service;
 import spark.Request;
 import spark.Response;
 

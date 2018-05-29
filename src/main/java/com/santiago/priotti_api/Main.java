@@ -1,8 +1,8 @@
-package com.santiago.priotti_web;
+package com.santiago.priotti_api;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.santiago.priotti_web.Injector.ConfigModule;
+import com.santiago.priotti_api.Injector.ConfigModule;
 
 public class Main {
 

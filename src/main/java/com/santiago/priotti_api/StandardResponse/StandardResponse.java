@@ -1,4 +1,4 @@
-package com.santiago.priotti_web.StandardResponse;
+package com.santiago.priotti_api.StandardResponse;
 
 public class StandardResponse<T> {
 

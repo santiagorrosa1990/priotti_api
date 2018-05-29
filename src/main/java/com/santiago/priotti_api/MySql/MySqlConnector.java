@@ -3,12 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.santiago.priotti_web.MySql;
+package com.santiago.priotti_api.MySql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -20,7 +18,7 @@ public class MySqlConnector {
 
     private static Connection connect = null;
     private static Statement statement = null;
-    private static final String USER = "root";
+    private static final String USER = "santiago";
     private static final String PASS = "Tato1432";
 
     protected static Statement connect() throws SQLException {
