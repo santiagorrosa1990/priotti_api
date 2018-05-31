@@ -43,7 +43,7 @@ public class ItemService extends MySqlConnector implements Service {
         List<List<String>> dtItemList;
         try {
             List<Item> itemList = itemDao.get() ;
-            dtItemList = itemList.stream().map(item -> Arrays.asList(item.getCodigo(), item.getAplicacion(), item.getRubro(), item.getMarca())).collect(Collectors.toList());
+            dtItemList = itemList.stream().map(item -> Arrays.asList(item.getCodigo(), item.getAplicacion(), item.getRubro(), item.getLinea())).collect(Collectors.toList());
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, dtItemList));
         } catch (SQLException ex) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: "+ex.getMessage()));

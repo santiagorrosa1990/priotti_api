@@ -17,5 +17,7 @@ public interface Dao<T> {
     
     
     public List<T> get() throws SQLException;
+
+    public void update(List<T> upTodateList) throws SQLException;
     
 }

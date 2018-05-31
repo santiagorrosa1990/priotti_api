@@ -13,5 +13,7 @@ package com.santiago.priotti_api.Interfaces;
 public interface Controller {
     
     public String getAll(spark.Request request, spark.Response response);
+
+    public void updateAll(spark.Request request, spark.Response response);
     
 }

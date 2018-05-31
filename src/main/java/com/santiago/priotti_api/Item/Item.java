@@ -17,23 +17,21 @@ public class Item {
     private String codigo;
     private String aplicacion;
     private String rubro;
-    private String marca;
+    private String linea;
     private String equivalencia;
     private String imagen;
-    private BigDecimal precio_lista;
-    private BigDecimal precio_oferta;
-    private Date fecha_modif;
-    private Date fecha_agregado;
+    private BigDecimal precioLista;
+    private BigDecimal preciOferta;
+    private Date fechaModificado;
+    private Date fechaAgregado;
 
-    public Item(String codigo, String aplicacion, String rubro, String marca, String equivalencia) {
+    public Item(String codigo, String aplicacion, String rubro, String linea, BigDecimal precioLista) {
         this.codigo = codigo;
         this.aplicacion = aplicacion;
         this.rubro = rubro;
-        this.marca = marca;
-        this.equivalencia = equivalencia;
+        this.linea = linea;
+        this.precioLista = precioLista;
     }
-    
-    
 
     public String getCodigo() {
         return codigo;
@@ -59,12 +57,12 @@ public class Item {
         this.rubro = rubro;
     }
 
-    public String getMarca() {
-        return marca;
+    public String getLinea() {
+        return linea;
     }
 
-    public void setMarca(String marca) {
-        this.marca = marca;
+    public void setLinea(String linea) {
+        this.linea = linea;
     }
 
     public String getEquivalencia() {
@@ -83,41 +81,46 @@ public class Item {
         this.imagen = imagen;
     }
 
-    public BigDecimal getPrecio_lista() {
-        return precio_lista;
+    public BigDecimal getPrecioLista() {
+        return precioLista;
     }
 
-    public void setPrecio_lista(BigDecimal precio_lista) {
-        this.precio_lista = precio_lista;
+    public void setPrecioLista(BigDecimal precioLista) {
+        this.precioLista = precioLista;
     }
 
-    public BigDecimal getPrecio_oferta() {
-        return precio_oferta;
+    public BigDecimal getPreciOferta() {
+        return preciOferta;
     }
 
-    public void setPrecio_oferta(BigDecimal precio_oferta) {
-        this.precio_oferta = precio_oferta;
+    public void setPreciOferta(BigDecimal preciOferta) {
+        this.preciOferta = preciOferta;
     }
 
-    public Date getFecha_modif() {
-        return fecha_modif;
+    public Date getFechaModificado() {
+        return fechaModificado;
     }
 
-    public void setFecha_modif(Date fecha_modif) {
-        this.fecha_modif = fecha_modif;
+    public void setFechaModificado(Date fechaModificado) {
+        this.fechaModificado = fechaModificado;
     }
 
-    public Date getFecha_agregado() {
-        return fecha_agregado;
+    public Date getFechaAgregado() {
+        return fechaAgregado;
     }
 
-    public void setFecha_agregado(Date fecha_agregado) {
-        this.fecha_agregado = fecha_agregado;
+    public void setFechaAgregado(Date fechaAgregado) {
+        this.fechaAgregado = fechaAgregado;
     }
-    
-    
-    
 
-    
-
+    @Override
+    public String toString() {
+        return "Item{" +
+                "codigo='" + codigo + '\'' +
+                ", aplicacion='" + aplicacion + '\'' +
+                ", rubro='" + rubro + '\'' +
+                ", linea='" + linea + '\'' +
+                ", precioLista=" + precioLista +
+                '}';
+    }
 }

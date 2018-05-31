@@ -7,6 +7,8 @@ package com.santiago.priotti_api.Item;
 
 import com.santiago.priotti_api.Interfaces.Dao;
 import com.santiago.priotti_api.MySql.MySqlConnector;
+
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -31,9 +33,18 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
                     rs.getString("aplicacion").trim(),
                     rs.getString("rubro").trim(),
                     rs.getString("marca").trim(),
-                    rs.getString("info").trim()));
+                    new BigDecimal(rs.getString("precio").trim())));
         }
         return itemList;
     }
+
+    @Override
+    public void update(List<Item> upToDateList) throws SQLException {
+        List<Item> itemList = new ArrayList();
+        Statement st = connect();
+        ResultSet rs = st.executeQuery("SELECT * FROM productos");
+
+    }
+
 
 }

@@ -28,18 +28,16 @@ public class Router {
             return itemController.getAll(request, response);
         });
 
-        post("/prueba", (request, response) -> {
-            System.out.println(request.body());
+        post("/item/all", (request, response) -> {
+            itemController.updateAll(request, response);
             return "Ok";
         });
 
         //        post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {
 //            return PersonaController.addPersona(request, response);
 //        });
-//
-//        delete("/personas/:dni", (request, response) -> {
-//            return PersonaController.deletePersona(request, response);
-//        });
+
+
     }
 
 }

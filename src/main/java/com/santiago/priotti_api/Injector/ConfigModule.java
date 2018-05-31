@@ -8,9 +8,11 @@ package com.santiago.priotti_api.Injector;
 import com.google.inject.AbstractModule;
 import com.santiago.priotti_api.Interfaces.Controller;
 import com.santiago.priotti_api.Interfaces.Dao;
+import com.santiago.priotti_api.Interfaces.Interpreter;
 import com.santiago.priotti_api.Interfaces.Service;
 import com.santiago.priotti_api.Item.ItemController;
 import com.santiago.priotti_api.Item.ItemDao;
+import com.santiago.priotti_api.Item.ItemInterpreter;
 import com.santiago.priotti_api.Item.ItemService;
 
 /**
@@ -25,6 +27,9 @@ public class ConfigModule extends AbstractModule {
         bind(Service.class).to(ItemService.class);
         bind(Controller.class).to(ItemController.class);
         bind(Dao.class).to(ItemDao.class);
+        bind(Interpreter.class).to(ItemInterpreter.class);
+
+
     }
 
 }
