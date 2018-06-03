@@ -6,10 +6,6 @@ public class StandardResponse<T> {
     private String message;
     private T data;
 
-    public StandardResponse(StatusResponse status) {
-        this.status = status;
-    }
-
     public StandardResponse(StatusResponse status, String message) {
         this.status = status;
         this.message = message;

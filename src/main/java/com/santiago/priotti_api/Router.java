@@ -24,13 +24,11 @@ public class Router {
 
     public void launch() {
 
-        get("/item", (request, response) -> {
-            return itemController.getAll(request, response);
-        });
+        get("/item", itemController::getAll);
 
         post("/item/all", (request, response) -> {
             itemController.updateAll(request, response);
-            return "Ok";
+            return "ok";
         });
 
         //        post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {

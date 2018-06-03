@@ -16,8 +16,8 @@ import java.util.List;
 public interface Dao<T> {
     
     
-    public List<T> get() throws SQLException;
+    List<T> get() throws SQLException;
 
-    public void update(List<T> upTodateList) throws SQLException;
+    void update(List<T> upToDateList) throws SQLException;
     
 }

@@ -12,8 +12,10 @@ package com.santiago.priotti_api.Interfaces;
  */
 public interface Service {
 
-    public String getAll();
+    String getAll();
     
-    public String getAllAsDatatablesFormat();
+    String getAllAsDatatablesFormat();
+
+    void update(String body);
 
 }

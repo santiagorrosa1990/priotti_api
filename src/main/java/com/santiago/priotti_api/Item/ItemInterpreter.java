@@ -12,44 +12,38 @@ import com.santiago.priotti_api.Interfaces.Interpreter;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Map;
+
 
 public class ItemInterpreter implements Interpreter<Item> {
 
     @Override
     public List<Item> interpret(String rawBody) {
-        Gson gson = new Gson();
-        List<Item> itemList = new ArrayList();
-        JsonObject json = gson.fromJson(rawBody, JsonObject.class);
-        JsonObject lineas = json.get("lineas").getAsJsonObject();
-        JsonObject rubros = json.get("rubros").getAsJsonObject();
-        JsonArray precios = json.getAsJsonArray("precios");
-        //System.out.println(precios);
-        for (JsonElement pa : precios) {
-            System.out.println("\"002\"".toString()); //TODO ver casteos de String
-            System.out.println(002);
-            /*JsonObject obj = pa.getAsJsonObject();
-            System.out.println(obj.get("linea").toString() + obj.get("rubro").toString());
-            //System.out.println("SALIDA "+rubros.get(obj.get("linea").toString() + "" + obj.get("rubro").toString()).toString());
-            //String rubro = rubros.get(obj.get("linea").toString() + "" + obj.get("rubro").toString()).toString();
-            String linea = lineas.get(obj.get("linea").toString()).toString();
-            itemList.add(new Item(
-                    obj.get("codigo").toString(),
-                    obj.get("aplicacion").toString(),
-                    rubro,
-                    linea,
-                    new BigDecimal(Integer.parseInt(obj.get("aplicacion").toString())))
-            );*/
+        try {
+            Gson gson = new Gson();
+            List<Item> itemList = new ArrayList<>();
+            JsonArray precios = gson.fromJson(rawBody, JsonArray.class);
+            for (JsonElement pa : precios) {
+                itemList.add(build(pa.getAsJsonObject()));
+            }
+            return itemList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         }
-        System.out.println(itemList.toString());
-        return new ArrayList<Item>();
-
     }
 
-    private Type getItemLisToken() {
-        Type type = new TypeToken<ArrayList<Item>>() {
-        }.getType();
-        return type;
+    private Item build(JsonObject json){
+        return Item.builder()
+                .codigo(json.get("codigo").getAsString())
+                .aplicacion(json.get("aplicacion").getAsString())
+                .linea(json.get("linea").getAsString())
+                .rubro(json.get("rubro").getAsString())
+                .precioLista(new BigDecimal(json.get("precio").getAsString()))
+                .build();
     }
+
+
 }
