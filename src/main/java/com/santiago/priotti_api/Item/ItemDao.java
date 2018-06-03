@@ -24,32 +24,43 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ItemDao extends MySqlConnector implements Dao<Item> {
 
     public static final int LIMIT = 50;
+    public static final String TABLE = "productos_test";
 
     @Override
-    public List<Item> get() throws SQLException {
-        return select(LIMIT);
+    public List<Item> read() throws SQLException {
+        return select(0);
     }
 
     @Override
-    public void update(List<Item> upToDateList) throws SQLException {
-        List<Item> itemList = select(0);
-        AtomicInteger cont = new AtomicInteger();
-        Map<String, Item> actual = toMap(itemList);
-        upToDateList.forEach(it -> {
-            if(actual.containsKey(it.getCodigo())){
-                if(actual.get(it.getCodigo()).equals(it)){
-
-                }else{
-                    //update(it);
-                    System.out.println(cont+"// "+it.getCodigo());
-                    cont.getAndIncrement();
+    public void update(List<Item> newList) throws SQLException {
+        List<Item> oldList = select(0);
+        close();
+        AtomicInteger updates = new AtomicInteger(0);
+        AtomicInteger inserts = new AtomicInteger(0);
+        Map<String, Item> current = toMap(oldList);
+        Statement st = connect();
+        System.out.println("Actualizando...");
+        newList.forEach(it -> {
+            try {
+                if (current.containsKey(it.getCodigo())) {
+                    if (!current.get(it.getCodigo()).equals(it)) {
+                        System.out.println("NEW"+it.toString());
+                        System.out.println("OLD"+current.get(it.getCodigo()));
+                        update(it, st);
+                        updates.getAndIncrement();
+                    }
+                } else {
+                    insert(it, st);
+                    inserts.getAndIncrement();
                 }
-            }else{
-                System.out.println("No existe");
-                //insert(it);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage()+" "+e.getClass());
             }
         });
-
+        close();
+        System.out.println("Listo");
+        System.out.println("UPDATES: "+updates);
+        System.out.println("INSERTS: "+inserts);
     }
 
     private Map<String, Item> toMap(List<Item> list) {
@@ -62,10 +73,10 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
         List<Item> itemList = new ArrayList();
         Statement st = connect();
         ResultSet rs;
-        if(limit > 0){
-            rs = st.executeQuery("SELECT * FROM productos LIMIT " +limit);
-        }else{
-            rs = st.executeQuery("SELECT * FROM productos");
+        if (limit > 0) {
+            rs = st.executeQuery("SELECT * FROM " + TABLE + " LIMIT " + limit);
+        } else {
+            rs = st.executeQuery("SELECT * FROM " + TABLE + "");
         }
         while (rs.next()) {
             itemList.add(Item.builder()
@@ -79,16 +90,25 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
         return itemList;
     }
 
-    private void update(Item item) throws SQLException {
-        Statement st = connect();
-        //st.executeQuery("UPDATE productos SET ...bla bla WHERE codigo = bla bla"); //TODO terminar el update
+    private void update(Item item, Statement st) throws SQLException {
+        String query = "UPDATE " + TABLE + " SET " +
+                "codigo = '" + item.getCodigo() +
+                "', aplicacion = '" + item.getAplicacion() +
+                "', rubro = '" + item.getRubro() +
+                "', marca = '" + item.getLinea() +
+                "', precio_lista = " + item.getPrecioLista() +
+                " WHERE codigo = '" + item.getCodigo()+"'";
+        st.executeUpdate(query);
     }
 
-    private void insert(Item item) throws SQLException{
-        Statement st = connect();
-        //st.executeQuery("INSERT INTO productos (codigo, aplicacion, rubro, marca, linea, precio) VALUES (bla bla bla)"); //TODO verificar nombre de las columnas de la bd
+    private void insert(Item item, Statement st) throws SQLException {
+        String query = "INSERT INTO " + TABLE + " (codigo, aplicacion, rubro, marca, precio_lista) VALUES ('" + item.getCodigo() +
+                "', '" + item.getAplicacion() +
+                "', '" + item.getRubro() +
+                "', '" + item.getLinea() +
+                "', " + item.getPrecioLista() + ")";
+        st.executeUpdate(query);
     }
-
 
 
 }

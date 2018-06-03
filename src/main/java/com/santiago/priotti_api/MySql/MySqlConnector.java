@@ -14,7 +14,7 @@ import java.sql.Statement;
  *
  * @author santiago
  */
-public class MySqlConnector {
+public class MySqlConnector { //TODO cambiar por algo no estatico o inyectado
 
     private static Connection connect = null;
     private static Statement statement = null;
@@ -23,7 +23,7 @@ public class MySqlConnector {
 
     protected static Statement connect() throws SQLException {
         connect = DriverManager
-                .getConnection("jdbc:mysql://localhost/db_priotti", USER, PASS);
+                .getConnection("jdbc:mysql://127.0.0.1/db_priotti", USER, PASS);
 
         statement = connect.createStatement();
 

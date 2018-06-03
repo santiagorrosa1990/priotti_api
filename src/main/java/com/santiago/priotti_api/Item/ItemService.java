@@ -37,7 +37,7 @@ public class ItemService implements Service {
     public String getAll() {
         List<Item> itemList;
         try {
-            itemList = itemDao.get();
+            itemList = itemDao.read();
             return new Gson().toJson(new StandardResponse<List>(StatusResponse.SUCCESS, itemList));
         } catch (SQLException ex) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
@@ -48,7 +48,7 @@ public class ItemService implements Service {
     public String getAllAsDatatablesFormat() {
         List<List<String>> datatablesItemList;
         try {
-            List<Item> itemList = itemDao.get();
+            List<Item> itemList = itemDao.read();
             datatablesItemList = itemList.stream().map(item -> Arrays.asList(item.getCodigo(), item.getAplicacion(), item.getRubro(), item.getLinea())).collect(Collectors.toList());
             return new Gson().toJson(new StandardResponse<List>(StatusResponse.SUCCESS, datatablesItemList));
         } catch (SQLException ex) {
