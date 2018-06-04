@@ -23,42 +23,42 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ItemDao extends MySqlConnector implements Dao<Item> {
 
-    public static final int LIMIT = 50;
+    public static final int LIMIT = 0;
     public static final String TABLE = "productos_test";
 
     @Override
     public List<Item> read() throws SQLException {
-        return select(0);
+        return select(LIMIT);
     }
 
     @Override
     public void update(List<Item> newList) throws SQLException {
-        List<Item> oldList = select(0);
+        List<Item> dbList = select(0);
         close();
         AtomicInteger updates = new AtomicInteger(0);
         AtomicInteger inserts = new AtomicInteger(0);
-        Map<String, Item> current = toMap(oldList);
+        Map<String, Item> oldList = toMap(dbList);
         Statement st = connect();
         System.out.println("Actualizando...");
         newList.forEach(it -> {
             try {
-                if (current.containsKey(it.getCodigo())) {
-                    if (!current.get(it.getCodigo()).equals(it)) {
-                        System.out.println("NEW"+it.toString());
-                        System.out.println("OLD"+current.get(it.getCodigo()));
-                        update(it, st);
+                if (oldList.containsKey(it.getCodigo())) {
+                    if (!oldList.get(it.getCodigo()).equals(it)) {
+                        System.out.println("Outdated "+oldList.get(it.getCodigo()));
+                        System.out.println("Updated  "+it);
                         updates.getAndIncrement();
+                        update(it, st);
                     }
                 } else {
                     insert(it, st);
                     inserts.getAndIncrement();
+                    System.out.println("Inserted "+it.toString());
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage()+" "+e.getClass());
             }
         });
         close();
-        System.out.println("Listo");
         System.out.println("UPDATES: "+updates);
         System.out.println("INSERTS: "+inserts);
     }

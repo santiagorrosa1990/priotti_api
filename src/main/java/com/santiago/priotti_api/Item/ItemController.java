@@ -18,6 +18,7 @@ public class ItemController implements Controller {
 
     @Override
     public String getAll(Request request, Response response) {
+        //response.type("utf-8");
         response.type("application/json");
         return itemService.getAllAsDatatablesFormat();
     }

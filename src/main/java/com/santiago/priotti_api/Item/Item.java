@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- *
  * @author Santiago
  */
 @Builder
@@ -23,13 +22,18 @@ import java.util.Date;
 @EqualsAndHashCode
 public class Item {
 
+    @EqualsAndHashCode.Include
     private String codigo;
+    @EqualsAndHashCode.Include
     private String aplicacion;
+    @EqualsAndHashCode.Include
     private String rubro;
+    @EqualsAndHashCode.Include
     private String linea;
+    @EqualsAndHashCode.Include
+    private BigDecimal precioLista;
     private String equivalencia;
     private String imagen;
-    private BigDecimal precioLista;
     private BigDecimal preciOferta;
     private Date fechaModificado;
     private Date fechaAgregado;

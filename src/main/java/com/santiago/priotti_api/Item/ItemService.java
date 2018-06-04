@@ -10,16 +10,12 @@ import com.google.inject.Inject;
 import com.santiago.priotti_api.Interfaces.Dao;
 import com.santiago.priotti_api.Interfaces.Interpreter;
 import com.santiago.priotti_api.Interfaces.Service;
-import com.santiago.priotti_api.MySql.MySqlConnector;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class ItemService implements Service {
@@ -49,8 +45,13 @@ public class ItemService implements Service {
         List<List<String>> datatablesItemList;
         try {
             List<Item> itemList = itemDao.read();
-            datatablesItemList = itemList.stream().map(item -> Arrays.asList(item.getCodigo(), item.getAplicacion(), item.getRubro(), item.getLinea())).collect(Collectors.toList());
-            return new Gson().toJson(new StandardResponse<List>(StatusResponse.SUCCESS, datatablesItemList));
+            datatablesItemList = itemList.stream().map(item -> Arrays.asList(item.getCodigo(),
+                    item.getAplicacion(),
+                    item.getRubro(),
+                    item.getLinea(),
+                    "$"+item.getPrecioLista().toString()))
+                    .collect(Collectors.toList());
+            return new Gson().toJson(datatablesItemList);
         } catch (SQLException ex) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
         }
