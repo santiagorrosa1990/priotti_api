@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -23,7 +25,7 @@ public class MySqlConnector { //TODO cambiar por algo no estatico o inyectado
     protected static Statement connect() throws SQLException {
         properties = new Properties();
         properties.setProperty("user", "santiago");
-        properties.setProperty("password", "Tato1432");
+        properties.setProperty("password", "");
         properties.setProperty("useSSL", "false");
         properties.setProperty("autoReconnect", "true");
 
@@ -47,5 +49,7 @@ public class MySqlConnector { //TODO cambiar por algo no estatico o inyectado
         }
 
     }
+
+
 
 }

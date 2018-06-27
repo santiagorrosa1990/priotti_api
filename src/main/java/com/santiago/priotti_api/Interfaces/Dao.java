@@ -18,6 +18,6 @@ public interface Dao<T> {
     
     List<T> read() throws SQLException;
 
-    void update(List<T> upToDateList) throws SQLException;
+    void update(List<T> updatedList) throws SQLException;
     
 }

@@ -5,17 +5,21 @@
  */
 package com.santiago.priotti_api.Interfaces;
 
+import com.santiago.priotti_api.Item.ItemRequest;
+
 /**
  *
  * @author santiago
  * @param <T>
  */
-public interface Service {
+public interface Service<T> {
 
     String getAll();
     
     String getAllAsDatatablesFormat();
 
-    void update(String body);
+    void updateAll(String body);
+
+    String getSearch(T request);
 
 }

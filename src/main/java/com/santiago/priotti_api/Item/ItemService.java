@@ -8,25 +8,26 @@ package com.santiago.priotti_api.Item;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.santiago.priotti_api.Interfaces.Dao;
-import com.santiago.priotti_api.Interfaces.Interpreter;
 import com.santiago.priotti_api.Interfaces.Service;
+import com.santiago.priotti_api.Interfaces.Translator;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
 
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ItemService implements Service {
+public class ItemService implements Service<ItemRequest> {
 
     private final Dao<Item> itemDao;
-    private final Interpreter<Item> interpreter;
+    private final Translator<Item> translator;
 
     @Inject
-    public ItemService(Dao<Item> itemDao, Interpreter<Item> interpreter) {
+    public ItemService(Dao<Item> itemDao, Translator<Item> translator) {
         this.itemDao = itemDao;
-        this.interpreter = interpreter;
+        this.translator = translator;
     }
 
     @Override
@@ -42,24 +43,18 @@ public class ItemService implements Service {
 
     @Override
     public String getAllAsDatatablesFormat() {
-        List<List<String>> datatablesItemList;
+         List<Map<String,String>> datatablesObject;
         try {
             List<Item> itemList = itemDao.read();
-            datatablesItemList = itemList.stream().map(item -> Arrays.asList(item.getCodigo(),
-                    item.getAplicacion(),
-                    item.getRubro(),
-                    item.getLinea(),
-                    "$"+item.getPrecioLista().toString()))
-                    .collect(Collectors.toList());
-            return new Gson().toJson(datatablesItemList);
+            return "{\"data\":"+ new Gson().toJson(itemList) +"}"; //TODO ver algo mejor para esto (o no)
         } catch (SQLException ex) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
         }
     }
 
     @Override
-    public void update(String body) {
-        List<Item> itemsList = interpreter.interpret(body);
+    public void updateAll(String body) {
+        List<Item> itemsList = translator.translateList(body);
         try {
             itemDao.update(itemsList);
         } catch (SQLException e) {
@@ -67,4 +62,29 @@ public class ItemService implements Service {
         }
     }
 
+    @Override
+    public String getSearch(ItemRequest request) {
+        //translator.translateSearchRequest(request.body());
+        return  "";
+    }
+
+    /*
+    @Override
+    public String getAllAsDatatablesFormat() {
+        List<List<String>> datatablesItemList;
+         List<Map<String,String>> datatablesObject;
+        try {
+            List<Item> itemList = itemDao.read();
+            datatablesItemList = itemList.stream().map(item -> Arrays.asList(item.getCodigo(),
+                    item.getAplicacion(),
+                    item.getRubro(),
+                    item.getLinea(),
+                    "$"+item.getPrecioLista().toString())) //TODO el $ lo debe hacer el front
+                    .collect(Collectors.toList());
+            return new Gson().toJson(datatablesItemList);
+        } catch (SQLException ex) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
+        }
+    }
+     */
 }

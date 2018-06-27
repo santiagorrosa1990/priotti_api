@@ -10,7 +10,6 @@ public class ItemController implements Controller {
 
     private final Service itemService;
 
-
     @Inject
     public ItemController(Service itemService) {
         this.itemService = itemService;
@@ -25,7 +24,14 @@ public class ItemController implements Controller {
 
     @Override
     public void updateAll(Request request, Response response) {
-        itemService.update(request.body());
+        itemService.updateAll(request.body());
     }
+
+    @Override
+    public String getSearch(Request request, Response response) {
+        //return itemService.getSearch(request.body());
+        return "";
+    }
+
 
 }

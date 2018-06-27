@@ -8,10 +8,7 @@ package com.santiago.priotti_api.Injector;
 import com.google.common.reflect.TypeToken;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
-import com.santiago.priotti_api.Interfaces.Controller;
-import com.santiago.priotti_api.Interfaces.Dao;
-import com.santiago.priotti_api.Interfaces.Interpreter;
-import com.santiago.priotti_api.Interfaces.Service;
+import com.santiago.priotti_api.Interfaces.*;
 import com.santiago.priotti_api.Item.*;
 
 import java.lang.reflect.Type;
@@ -30,11 +27,7 @@ public class ConfigModule extends AbstractModule {
         bind(Controller.class).to(ItemController.class);
         bind(new TypeLiteral<Dao<Item>>(){}).to(ItemDao.class);
         bind(new TypeLiteral<Interpreter<Item>>(){}).to(ItemInterpreter.class);
-
-
-
-
-
+        bind(new TypeLiteral<Translator<Item>>(){}).to(ItemTranslator.class);
 
     }
 

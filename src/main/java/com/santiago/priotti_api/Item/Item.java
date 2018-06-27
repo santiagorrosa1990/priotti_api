@@ -5,6 +5,7 @@
  */
 package com.santiago.priotti_api.Item;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,13 +30,17 @@ public class Item {
     @EqualsAndHashCode.Include
     private String rubro;
     @EqualsAndHashCode.Include
-    private String linea;
+    private String marca;
     @EqualsAndHashCode.Include
+    @SerializedName("precio_lista")
     private BigDecimal precioLista;
-    private String equivalencia;
+    private String info;
     private String imagen;
-    private BigDecimal preciOferta;
+    @SerializedName("precio_oferta")
+    private BigDecimal precioOferta;
+    @SerializedName("fecha_modificado")
     private Date fechaModificado;
+    @SerializedName("fecha_agregado")
     private Date fechaAgregado;
 
 }

@@ -2,19 +2,15 @@ package com.santiago.priotti_api.Item;
 
 //Se crea una lista completa de los items a partir de la request generada con aprecios.txt, arubrosx.txt y alineasx.txt
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.santiago.priotti_api.Interfaces.Interpreter;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class ItemInterpreter implements Interpreter<Item> {
@@ -39,7 +35,7 @@ public class ItemInterpreter implements Interpreter<Item> {
         return Item.builder()
                 .codigo(json.get("codigo").getAsString())
                 .aplicacion(json.get("aplicacion").getAsString())
-                .linea(json.get("linea").getAsString())
+                .marca(json.get("linea").getAsString())
                 .rubro(json.get("rubro").getAsString())
                 .precioLista(new BigDecimal(json.get("precio").getAsString()))
                 .build();

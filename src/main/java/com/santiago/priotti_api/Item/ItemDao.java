@@ -12,10 +12,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -23,8 +20,24 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ItemDao extends MySqlConnector implements Dao<Item> {
 
-    public static final int LIMIT = 0;
-    public static final String TABLE = "productos_test";
+    /* Modelo de respuesta para datatables
+ {"data":[
+            {
+            "codigo":"9004",
+            "aplicacion":"HB1 12V 65\/45W P29t",
+            "marca":"OSRAM",
+            "rubro":"LAMPARAS HALOGENAS OSRAM",
+            "info":"",
+            "precio_lista":"273.88",
+            "precio_oferta":"0.00",
+            "imagen":"9004"
+            },
+          ]
+          }
+    */
+
+    public static final int LIMIT = 5;
+    public static final String TABLE = "productos";
 
     @Override
     public List<Item> read() throws SQLException {
@@ -32,35 +45,37 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
     }
 
     @Override
-    public void update(List<Item> newList) throws SQLException {
+    public void update(List<Item> updatedList) throws SQLException {
+        long lStartTime = new Date().getTime(); // start time
         List<Item> dbList = select(0);
-        close();
         AtomicInteger updates = new AtomicInteger(0);
         AtomicInteger inserts = new AtomicInteger(0);
-        Map<String, Item> oldList = toMap(dbList);
+        Map<String, Item> outdatedList = toMap(dbList);
         Statement st = connect();
-        System.out.println("Actualizando...");
-        newList.forEach(it -> {
+        System.out.println("Updating...");
+        updatedList.forEach(it -> {
             try {
-                if (oldList.containsKey(it.getCodigo())) {
-                    if (!oldList.get(it.getCodigo()).equals(it)) {
-                        System.out.println("Outdated "+oldList.get(it.getCodigo()));
-                        System.out.println("Updated  "+it);
+                if (outdatedList.containsKey(it.getCodigo())) {
+                    if (!outdatedList.get(it.getCodigo()).equals(it)) {
+                        //System.out.println("Updated  " + it);
                         updates.getAndIncrement();
                         update(it, st);
                     }
                 } else {
                     insert(it, st);
                     inserts.getAndIncrement();
-                    System.out.println("Inserted "+it.toString());
+                    //System.out.println("Inserted " + it.toString());
                 }
             } catch (SQLException e) {
-                System.out.println(e.getMessage()+" "+e.getClass());
+                System.out.println(e.getMessage() + " " + e.getClass());
             }
         });
         close();
-        System.out.println("UPDATES: "+updates);
-        System.out.println("INSERTS: "+inserts);
+        long lEndTime = new Date().getTime(); // end time
+        long difference = lEndTime - lStartTime; // check different
+        System.out.println("Elapsed milliseconds: " + difference);
+        System.out.println("Updates: " + updates);
+        System.out.println("Inserts: " + inserts);
     }
 
     private Map<String, Item> toMap(List<Item> list) {
@@ -70,7 +85,7 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
     }
 
     private List<Item> select(int limit) throws SQLException {
-        List<Item> itemList = new ArrayList();
+        List<Item> itemList = new ArrayList<>();
         Statement st = connect();
         ResultSet rs;
         if (limit > 0) {
@@ -83,10 +98,14 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
                     .codigo(rs.getString("codigo").trim())
                     .aplicacion(rs.getString("aplicacion").trim())
                     .rubro(rs.getString("rubro").trim())
-                    .linea(rs.getString("marca").trim())
+                    .marca(rs.getString("marca").trim())
+                    .info(Optional.ofNullable(rs.getString("info")).orElse("")) //TODO cambiar por equivalencia y ver lo de NULL en MYSQL
                     .precioLista(new BigDecimal(rs.getString("precio_lista").trim()))
+                    .precioOferta(new BigDecimal(rs.getString("precio_oferta").trim()))
+                    .imagen(rs.getString("imagen").trim())
                     .build());
         }
+        close();
         return itemList;
     }
 
@@ -95,9 +114,9 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
                 "codigo = '" + item.getCodigo() +
                 "', aplicacion = '" + item.getAplicacion() +
                 "', rubro = '" + item.getRubro() +
-                "', marca = '" + item.getLinea() +
+                "', marca = '" + item.getMarca() +
                 "', precio_lista = " + item.getPrecioLista() +
-                " WHERE codigo = '" + item.getCodigo()+"'";
+                " WHERE codigo = '" + item.getCodigo() + "'";
         st.executeUpdate(query);
     }
 
@@ -105,10 +124,11 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
         String query = "INSERT INTO " + TABLE + " (codigo, aplicacion, rubro, marca, precio_lista) VALUES ('" + item.getCodigo() +
                 "', '" + item.getAplicacion() +
                 "', '" + item.getRubro() +
-                "', '" + item.getLinea() +
+                "', '" + item.getMarca() +
                 "', " + item.getPrecioLista() + ")";
         st.executeUpdate(query);
     }
 
-
 }
+
+
