@@ -19,5 +19,7 @@ public interface Dao<T> {
     List<T> read() throws SQLException;
 
     void update(List<T> updatedList) throws SQLException;
+
+    List<T> search(List<String> keywords) throws SQLException;
     
 }

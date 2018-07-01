@@ -20,6 +20,6 @@ public interface Service<T> {
 
     void updateAll(String body);
 
-    String getSearch(T request);
+    String getSearch(String body);
 
 }

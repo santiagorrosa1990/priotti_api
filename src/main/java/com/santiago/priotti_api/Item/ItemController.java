@@ -29,8 +29,7 @@ public class ItemController implements Controller {
 
     @Override
     public String getSearch(Request request, Response response) {
-        //return itemService.getSearch(request.body());
-        return "";
+        return itemService.getSearch(request.body());
     }
 
 

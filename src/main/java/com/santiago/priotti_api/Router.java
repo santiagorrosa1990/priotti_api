@@ -30,11 +30,8 @@ public class Router {
             itemController.updateAll(request, response);
             return "ok";
         });
-/*
-        post("/item/search", (request, response) -> {
-            itemController.updateAll(request, response);
-            return "ok";
-        });*/
+
+        post("/item/search", itemController::getSearch);
 
         //        post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {
 //            return PersonaController.addPersona(request, response);

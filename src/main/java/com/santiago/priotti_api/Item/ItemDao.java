@@ -36,7 +36,7 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
           }
     */
 
-    public static final int LIMIT = 5;
+    public static final int LIMIT = 100;
     public static final String TABLE = "productos";
 
     @Override
@@ -76,6 +76,30 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
         System.out.println("Elapsed milliseconds: " + difference);
         System.out.println("Updates: " + updates);
         System.out.println("Inserts: " + inserts);
+    }
+
+    @Override
+    public List<Item> search(List<String> keywords) throws SQLException {
+        String query = new ItemQueryBuilder().build(keywords);
+        query = query+" LIMIT "+LIMIT;
+        List<Item> itemList = new ArrayList<>();
+        Statement st = connect();
+        ResultSet rs;
+        rs = st.executeQuery(query);
+        while (rs.next()) {
+            itemList.add(Item.builder()
+                    .codigo(rs.getString("codigo").trim())
+                    .aplicacion(rs.getString("aplicacion").trim())
+                    .rubro(rs.getString("rubro").trim())
+                    .marca(rs.getString("marca").trim())
+                    .info(Optional.ofNullable(rs.getString("info")).orElse("")) //TODO cambiar por equivalencia y ver lo de NULL en MYSQL
+                    .precioLista(new BigDecimal(rs.getString("precio_lista").trim()))
+                    .precioOferta(new BigDecimal(rs.getString("precio_oferta").trim()))
+                    .imagen(rs.getString("imagen").trim())
+                    .build());
+        }
+        close();
+        return itemList;
     }
 
     private Map<String, Item> toMap(List<Item> list) {
