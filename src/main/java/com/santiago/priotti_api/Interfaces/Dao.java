@@ -20,6 +20,6 @@ public interface Dao<T> {
 
     void update(List<T> updatedList) throws SQLException;
 
-    List<T> search(List<String> keywords) throws SQLException;
+    List<T> search(List keywords) throws SQLException;
     
 }

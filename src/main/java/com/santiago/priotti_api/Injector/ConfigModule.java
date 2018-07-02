@@ -26,7 +26,6 @@ public class ConfigModule extends AbstractModule {
         bind(Service.class).to(ItemService.class);
         bind(Controller.class).to(ItemController.class);
         bind(new TypeLiteral<Dao<Item>>(){}).to(ItemDao.class);
-        bind(new TypeLiteral<Interpreter<Item>>(){}).to(ItemInterpreter.class);
         bind(new TypeLiteral<Translator<Item>>(){}).to(ItemTranslator.class);
 
     }

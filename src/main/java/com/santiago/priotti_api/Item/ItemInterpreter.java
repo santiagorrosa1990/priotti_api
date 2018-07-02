@@ -16,7 +16,7 @@ import java.util.List;
 public class ItemInterpreter implements Interpreter<Item> {
 
     @Override
-    public List<Item> interpret(String rawBody) {
+    public List<Item> interpret(String rawBody) {  //TODO esta clase deberia interpretar la respuesta de la base de datos
         try {
             Gson gson = new Gson();
             List<Item> itemList = new ArrayList<>();

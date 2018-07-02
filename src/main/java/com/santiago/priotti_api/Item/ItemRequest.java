@@ -6,4 +6,6 @@ public class ItemRequest {
     boolean oferta;
     boolean novedad;
 
+    //TODO aplicar esto
+
 }

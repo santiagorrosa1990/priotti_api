@@ -55,17 +55,17 @@ public class ItemService implements Service<ItemRequest> {
     @Override
     public String getSearch(String body) {
         System.out.println(body);
-        List<String> keywords = new Gson().fromJson(body, ArrayList.class);
+        List keywords = new Gson().fromJson(body, ArrayList.class);
         List<List<String>> datatablesItemList;
         try {
-            List<Item> itemList = itemDao.search(keywords);
+            List<Item> itemList = itemDao.search(keywords); //TODO esto debería ir en un presenter?
             datatablesItemList = itemList.stream().map(item -> Arrays.asList(
                     item.getCodigo(),
                     item.getAplicacion(),
                     item.getRubro(),
                     item.getMarca(),
                     item.getInfo(),
-                    "$"+item.getPrecioLista().toString(), //TODO sacar el $ de aca
+                    "$"+item.getPrecioLista().toString(),
                     "$"+item.getPrecioOferta().toString(),
                     item.getImagen()))
                     .collect(Collectors.toList());

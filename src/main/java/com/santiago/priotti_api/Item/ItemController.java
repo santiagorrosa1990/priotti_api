@@ -32,5 +32,5 @@ public class ItemController implements Controller {
         return itemService.getSearch(request.body());
     }
 
-
+    //TODO en esta capa debe ir la autenticación de usuario y la encriptación
 }

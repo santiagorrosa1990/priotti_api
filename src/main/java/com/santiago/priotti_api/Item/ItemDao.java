@@ -20,22 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ItemDao extends MySqlConnector implements Dao<Item> {
 
-    /* Modelo de respuesta para datatables
- {"data":[
-            {
-            "codigo":"9004",
-            "aplicacion":"HB1 12V 65\/45W P29t",
-            "marca":"OSRAM",
-            "rubro":"LAMPARAS HALOGENAS OSRAM",
-            "info":"",
-            "precio_lista":"273.88",
-            "precio_oferta":"0.00",
-            "imagen":"9004"
-            },
-          ]
-          }
-    */
-
     public static final int LIMIT = 100;
     public static final String TABLE = "productos";
 
@@ -79,7 +63,7 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
     }
 
     @Override
-    public List<Item> search(List<String> keywords) throws SQLException {
+    public List<Item> search(List keywords) throws SQLException {
         String query = new ItemQueryBuilder().build(keywords);
         query = query+" LIMIT "+LIMIT;
         List<Item> itemList = new ArrayList<>();
