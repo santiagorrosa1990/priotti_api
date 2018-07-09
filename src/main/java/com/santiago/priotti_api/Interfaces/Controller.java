@@ -14,8 +14,8 @@ public interface Controller {
     
     String getAll(spark.Request request, spark.Response response);
 
-    void updateAll(spark.Request request, spark.Response response);
+    String updateAll(spark.Request request, spark.Response response);
 
-    String getSearch(spark.Request request, spark.Response response);
+    String search(spark.Request request, spark.Response response);
     
 }

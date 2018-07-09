@@ -26,12 +26,9 @@ public class Router {
 
         get("/item", itemController::getAll);
 
-        post("/item/all", (request, response) -> {
-            itemController.updateAll(request, response);
-            return "ok";
-        });
+        post("/item/all", itemController::updateAll);
 
-        post("/item/search", itemController::getSearch);
+        post("/item/search", itemController::search);
 
         //        post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {
 //            return PersonaController.addPersona(request, response);

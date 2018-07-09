@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
 public class ItemService implements Service<ItemRequest> {
 
     private final Dao<Item> itemDao;
-    private final Translator<Item> translator;
+    private final Translator<Item, ItemRequest> translator; // TODO ver si mandar el translator al controller
 
     @Inject
-    public ItemService(Dao<Item> itemDao, Translator<Item> translator) {
+    public ItemService(Dao<Item> itemDao, Translator<Item, ItemRequest> translator) {
         this.itemDao = itemDao;
         this.translator = translator;
     }
@@ -58,7 +58,7 @@ public class ItemService implements Service<ItemRequest> {
         List keywords = new Gson().fromJson(body, ArrayList.class);
         List<List<String>> datatablesItemList;
         try {
-            List<Item> itemList = itemDao.search(keywords); //TODO esto debería ir en un presenter?
+            List<Item> itemList = itemDao.search(keywords); //TODO esto debería ir en un presenter (?)
             datatablesItemList = itemList.stream().map(item -> Arrays.asList(
                     item.getCodigo(),
                     item.getAplicacion(),

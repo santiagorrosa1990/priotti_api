@@ -2,44 +2,35 @@ package com.santiago.priotti_api.Item;
 
 //Se crea una lista completa de los items a partir de la request generada con aprecios.txt, arubrosx.txt y alineasx.txt
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.santiago.priotti_api.Interfaces.Interpreter;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class ItemInterpreter implements Interpreter<Item> {
 
     @Override
-    public List<Item> interpret(String rawBody) {  //TODO esta clase deberia interpretar la respuesta de la base de datos
-        try {
-            Gson gson = new Gson();
-            List<Item> itemList = new ArrayList<>();
-            JsonArray precios = gson.fromJson(rawBody, JsonArray.class);
-            for (JsonElement pa : precios) {
-                itemList.add(build(pa.getAsJsonObject()));
-            }
-            return itemList;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+    public List<Item> interpret(ResultSet rs) throws SQLException {
+        List<Item> itemList = new ArrayList<>();
+        while (rs.next()) {
+            itemList.add(Item.builder()
+                    .codigo(rs.getString("codigo").trim())
+                    .aplicacion(rs.getString("aplicacion").trim())
+                    .rubro(rs.getString("rubro").trim())
+                    .marca(rs.getString("marca").trim())
+                    .info(Optional.ofNullable(rs.getString("info")).orElse("")) //TODO cambiar por equivalencia y ver lo de NULL en MYSQL
+                    .precioLista(new BigDecimal(rs.getString("precio_lista").trim()))
+                    .precioOferta(new BigDecimal(rs.getString("precio_oferta").trim()))
+                    .imagen(rs.getString("imagen").trim())
+                    .build());
         }
+        return itemList;
     }
-
-    private Item build(JsonObject json){
-        return Item.builder()
-                .codigo(json.get("codigo").getAsString())
-                .aplicacion(json.get("aplicacion").getAsString())
-                .marca(json.get("linea").getAsString())
-                .rubro(json.get("rubro").getAsString())
-                .precioLista(new BigDecimal(json.get("precio").getAsString()))
-                .build();
-    }
-
 
 }

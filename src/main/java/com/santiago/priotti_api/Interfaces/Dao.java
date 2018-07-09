@@ -20,6 +20,8 @@ public interface Dao<T> {
 
     void update(List<T> updatedList) throws SQLException;
 
+    void create(T newElement) throws SQLException;
+
     List<T> search(List keywords) throws SQLException;
     
 }

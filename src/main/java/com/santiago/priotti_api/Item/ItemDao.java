@@ -63,25 +63,17 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
     }
 
     @Override
+    public void create(Item newElement) throws SQLException {
+
+    }
+
+    @Override
     public List<Item> search(List keywords) throws SQLException {
         String query = new ItemQueryBuilder().build(keywords);
         query = query+" LIMIT "+LIMIT;
-        List<Item> itemList = new ArrayList<>();
         Statement st = connect();
-        ResultSet rs;
-        rs = st.executeQuery(query);
-        while (rs.next()) {
-            itemList.add(Item.builder()
-                    .codigo(rs.getString("codigo").trim())
-                    .aplicacion(rs.getString("aplicacion").trim())
-                    .rubro(rs.getString("rubro").trim())
-                    .marca(rs.getString("marca").trim())
-                    .info(Optional.ofNullable(rs.getString("info")).orElse("")) //TODO cambiar por equivalencia y ver lo de NULL en MYSQL
-                    .precioLista(new BigDecimal(rs.getString("precio_lista").trim()))
-                    .precioOferta(new BigDecimal(rs.getString("precio_oferta").trim()))
-                    .imagen(rs.getString("imagen").trim())
-                    .build());
-        }
+        ResultSet rs = st.executeQuery(query);
+        List<Item> itemList = new ItemInterpreter().interpret(rs);
         close();
         return itemList;
     }
@@ -93,26 +85,10 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
     }
 
     private List<Item> select(int limit) throws SQLException {
-        List<Item> itemList = new ArrayList<>();
         Statement st = connect();
         ResultSet rs;
-        if (limit > 0) {
-            rs = st.executeQuery("SELECT * FROM " + TABLE + " LIMIT " + limit);
-        } else {
-            rs = st.executeQuery("SELECT * FROM " + TABLE + "");
-        }
-        while (rs.next()) {
-            itemList.add(Item.builder()
-                    .codigo(rs.getString("codigo").trim())
-                    .aplicacion(rs.getString("aplicacion").trim())
-                    .rubro(rs.getString("rubro").trim())
-                    .marca(rs.getString("marca").trim())
-                    .info(Optional.ofNullable(rs.getString("info")).orElse("")) //TODO cambiar por equivalencia y ver lo de NULL en MYSQL
-                    .precioLista(new BigDecimal(rs.getString("precio_lista").trim()))
-                    .precioOferta(new BigDecimal(rs.getString("precio_oferta").trim()))
-                    .imagen(rs.getString("imagen").trim())
-                    .build());
-        }
+        rs = st.executeQuery("SELECT * FROM " + TABLE + " LIMIT " + limit);
+        List<Item> itemList = new ItemInterpreter().interpret(rs);
         close();
         return itemList;
     }
