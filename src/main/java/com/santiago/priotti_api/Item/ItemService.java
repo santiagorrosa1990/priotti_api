@@ -9,45 +9,101 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.santiago.priotti_api.Interfaces.Dao;
 import com.santiago.priotti_api.Interfaces.Service;
-import com.santiago.priotti_api.MySql.MySqlConnector;
+import com.santiago.priotti_api.Interfaces.Translator;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ItemService extends MySqlConnector implements Service {
+public class ItemService implements Service<ItemRequest> {
 
-    private final Dao itemDao;
-    
+    private final Dao<Item> itemDao;
+    private final Translator<Item, ItemRequest> translator; // TODO ver si mandar el translator al controller
 
     @Inject
-    public ItemService(Dao itemDao) {
+    public ItemService(Dao<Item> itemDao, Translator<Item, ItemRequest> translator) {
         this.itemDao = itemDao;
+        this.translator = translator;
     }
 
     @Override
     public String getAll() {
         List<Item> itemList;
         try {
-            itemList = itemDao.get();
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, itemList));
+            itemList = itemDao.read();
+            return new Gson().toJson(new StandardResponse<List>(StatusResponse.SUCCESS, itemList));
         } catch (SQLException ex) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: "+ex.getMessage()));
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
         }
     }
 
-    public String getAllAsDatatablesFormat() {
-        List<List<String>> dtItemList;
+    @Override
+    public void updateAll(String body) {
+        List<Item> itemsList = translator.translateList(body);
         try {
-            List<Item> itemList = itemDao.get() ;
-            dtItemList = itemList.stream().map(item -> Arrays.asList(item.getCodigo(), item.getAplicacion(), item.getRubro(), item.getMarca())).collect(Collectors.toList());
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, dtItemList));
-        } catch (SQLException ex) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: "+ex.getMessage()));
+            itemDao.update(itemsList);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
+    @Override
+    public String getSearch(String array) {
+        List keywords = new Gson().fromJson(array, ArrayList.class);
+        List<List<String>> datatablesItemList;
+        try {
+            List<Item> itemList = itemDao.search(keywords); //TODO esto debería ir en un presenter (?)
+            datatablesItemList = itemList.stream().map(item -> Arrays.asList(
+                    item.getCodigo(),
+                    item.getAplicacion(),
+                    item.getRubro(),
+                    item.getMarca(),
+                    item.getInfo(),
+                    "$"+item.getPrecioLista().toString(),
+                    "$"+item.getPrecioOferta().toString(),
+                    item.getImagen()))
+                    .collect(Collectors.toList());
+            return new Gson().toJson(datatablesItemList);
+        } catch (SQLException ex) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
+        }
+    }
+
+    @Override
+    public String getAllAsDatatablesFormat() {
+        List<List<String>> datatablesItemList;
+        try {
+            List<Item> itemList = itemDao.read();
+            datatablesItemList = itemList.stream().map(item -> Arrays.asList(
+                    item.getCodigo(),
+                    item.getAplicacion(),
+                    item.getRubro(),
+                    item.getMarca(),
+                    item.getInfo(),
+                    "$"+item.getPrecioLista().toString(), //TODO sacar el $ de aca
+                    "$"+item.getPrecioOferta().toString(),
+                    item.getImagen()))
+                    .collect(Collectors.toList());
+            return new Gson().toJson(datatablesItemList);
+        } catch (SQLException ex) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
+        }
+    }
+
+    /*@Override
+    public String getAllAsDatatablesFormat() {
+         List<Map<String,String>> datatablesObject;
+        try {
+            List<Item> itemList = itemDao.read();
+            return "{\"data\":"+ new Gson().toJson(itemList) +"}"; //TODO ver algo mejor para esto (o no)
+        } catch (SQLException ex) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
+        }
+    }*/
 
 }

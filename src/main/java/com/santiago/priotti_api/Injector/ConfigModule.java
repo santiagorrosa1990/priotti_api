@@ -5,13 +5,15 @@
  */
 package com.santiago.priotti_api.Injector;
 
+import com.google.common.reflect.TypeToken;
 import com.google.inject.AbstractModule;
-import com.santiago.priotti_api.Interfaces.Controller;
-import com.santiago.priotti_api.Interfaces.Dao;
-import com.santiago.priotti_api.Interfaces.Service;
-import com.santiago.priotti_api.Item.ItemController;
-import com.santiago.priotti_api.Item.ItemDao;
-import com.santiago.priotti_api.Item.ItemService;
+import com.google.inject.TypeLiteral;
+import com.santiago.priotti_api.Interfaces.*;
+import com.santiago.priotti_api.Item.*;
+import com.santiago.priotti_api.User.UserAuthenticator;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  *
@@ -23,8 +25,11 @@ public class ConfigModule extends AbstractModule {
     protected void configure() {
 
         bind(Service.class).to(ItemService.class);
+        bind(UserAuthenticator.class);
         bind(Controller.class).to(ItemController.class);
-        bind(Dao.class).to(ItemDao.class);
+        bind(new TypeLiteral<Dao<Item>>(){}).to(ItemDao.class);
+        bind(new TypeLiteral<Translator<Item, ItemRequest>>(){}).to(ItemTranslator.class);
+
     }
 
 }

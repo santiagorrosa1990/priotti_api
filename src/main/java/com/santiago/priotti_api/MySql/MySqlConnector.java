@@ -9,21 +9,28 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
- *
  * @author santiago
  */
-public class MySqlConnector {
+public class MySqlConnector { //TODO cambiar por algo no estatico o inyectado
 
     private static Connection connect = null;
     private static Statement statement = null;
-    private static final String USER = "santiago";
-    private static final String PASS = "Tato1432";
+    private static Properties properties = null;
 
     protected static Statement connect() throws SQLException {
+        properties = new Properties();
+        properties.setProperty("user", "santiago");
+        properties.setProperty("password", "");
+        properties.setProperty("useSSL", "false");
+        properties.setProperty("autoReconnect", "true");
+
         connect = DriverManager
-                .getConnection("jdbc:mysql://localhost/db_priotti", USER, PASS);
+                .getConnection("jdbc:mysql://127.0.0.1/db_priotti", properties);
 
         statement = connect.createStatement();
 
@@ -42,5 +49,7 @@ public class MySqlConnector {
         }
 
     }
+
+
 
 }

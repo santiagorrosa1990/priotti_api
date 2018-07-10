@@ -16,6 +16,12 @@ import java.util.List;
 public interface Dao<T> {
     
     
-    public List<T> get() throws SQLException;
+    List<T> read() throws SQLException;
+
+    void update(List<T> updatedList) throws SQLException;
+
+    void create(T newElement) throws SQLException;
+
+    List<T> search(List keywords) throws SQLException;
     
 }

@@ -24,22 +24,17 @@ public class Router {
 
     public void launch() {
 
-        get("/item", (request, response) -> {
-            return itemController.getAll(request, response);
-        });
+        get("/item", itemController::getAll);
 
-        post("/prueba", (request, response) -> {
-            System.out.println(request.body());
-            return "Ok";
-        });
+        post("/item/all", itemController::updateAll);
+
+        post("/item/search", itemController::search);
 
         //        post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {
 //            return PersonaController.addPersona(request, response);
 //        });
-//
-//        delete("/personas/:dni", (request, response) -> {
-//            return PersonaController.deletePersona(request, response);
-//        });
+
+
     }
 
 }
