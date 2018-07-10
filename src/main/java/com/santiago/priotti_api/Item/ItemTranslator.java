@@ -20,7 +20,7 @@ public class ItemTranslator implements Translator<Item, ItemRequest> {
     public ItemRequest translate(Request request){
         Gson gson = new Gson();
         Type type = new TypeToken<ItemRequest>() {}.getType();
-        return gson.fromJson(request.body(), type);
+        return gson.fromJson(request.body(), ItemRequest.class);
     }
 
     @Override

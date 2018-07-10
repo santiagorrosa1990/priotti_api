@@ -44,10 +44,11 @@ public class ItemController implements Controller {
         try {
             ItemRequest itemRequest = new ItemTranslator().translate(request);
             if (authenticator.authenticate(itemRequest)) {      //TODO implementar interfaz Request con getCredentials();
-                return itemService.getSearch(request.body());
+                return itemService.getSearch(itemRequest.getKeywords());
             }
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
         } catch (Exception e) {
+            e.printStackTrace();
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
         }
     }

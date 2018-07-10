@@ -53,9 +53,8 @@ public class ItemService implements Service<ItemRequest> {
     }
 
     @Override
-    public String getSearch(String body) {
-        System.out.println(body);
-        List keywords = new Gson().fromJson(body, ArrayList.class);
+    public String getSearch(String array) {
+        List keywords = new Gson().fromJson(array, ArrayList.class);
         List<List<String>> datatablesItemList;
         try {
             List<Item> itemList = itemDao.search(keywords); //TODO esto debería ir en un presenter (?)
