@@ -30,6 +30,8 @@ public class Router {
 
         post("/item/search", itemController::search);
 
+        get("/ping",(request, response) -> "pong");
+
         //        post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {
 //            return PersonaController.addPersona(request, response);
 //        });
