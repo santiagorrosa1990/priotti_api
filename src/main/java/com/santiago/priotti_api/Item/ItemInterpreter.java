@@ -2,7 +2,6 @@ package com.santiago.priotti_api.Item;
 
 //Se crea una lista completa de los items a partir de la request generada con aprecios.txt, arubrosx.txt y alineasx.txt
 
-import com.google.gson.JsonObject;
 import com.santiago.priotti_api.Interfaces.Interpreter;
 
 import java.math.BigDecimal;

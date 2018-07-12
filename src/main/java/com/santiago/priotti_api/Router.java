@@ -6,8 +6,11 @@
 package com.santiago.priotti_api;
 
 import com.google.inject.Inject;
-import com.santiago.priotti_api.Interfaces.Controller;
-import static spark.Spark.*;
+import com.santiago.priotti_api.Item.ItemController;
+import com.santiago.priotti_api.User.UserController;
+
+import static spark.Spark.get;
+import static spark.Spark.post;
 
 /**
  *
@@ -15,11 +18,13 @@ import static spark.Spark.*;
  */
 public class Router {
 
-    private final Controller itemController;
+    private final ItemController itemController;
+    private final UserController userController;
 
     @Inject
-    public Router(Controller itemController) {
+    public Router(ItemController itemController, UserController userController) {
         this.itemController = itemController;
+        this.userController = userController;
     }
 
     public void launch() {
@@ -30,11 +35,11 @@ public class Router {
 
         post("/item/search", itemController::search);
 
+        post("/login", userController::login);
+
         get("/ping",(request, response) -> "pong");
 
-        //        post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {
-//            return PersonaController.addPersona(request, response);
-//        });
+        //TODO post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {
 
 
     }

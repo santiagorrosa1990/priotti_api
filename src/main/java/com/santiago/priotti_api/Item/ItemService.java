@@ -7,8 +7,6 @@ package com.santiago.priotti_api.Item;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
-import com.santiago.priotti_api.Interfaces.Dao;
-import com.santiago.priotti_api.Interfaces.Service;
 import com.santiago.priotti_api.Interfaces.Translator;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
@@ -17,32 +15,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ItemService implements Service<ItemRequest> {
+public class ItemService {
 
-    private final Dao<Item> itemDao;
+    private final ItemDao itemDao;
     private final Translator<Item, ItemRequest> translator; // TODO ver si mandar el translator al controller
 
     @Inject
-    public ItemService(Dao<Item> itemDao, Translator<Item, ItemRequest> translator) {
+    public ItemService(ItemDao itemDao, Translator<Item, ItemRequest> translator) {
         this.itemDao = itemDao;
         this.translator = translator;
     }
 
-    @Override
-    public String getAll() {
-        List<Item> itemList;
-        try {
-            itemList = itemDao.read();
-            return new Gson().toJson(new StandardResponse<List>(StatusResponse.SUCCESS, itemList));
-        } catch (SQLException ex) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
-        }
-    }
-
-    @Override
     public void updateAll(String body) {
         List<Item> itemsList = translator.translateList(body);
         try {
@@ -52,8 +37,7 @@ public class ItemService implements Service<ItemRequest> {
         }
     }
 
-    @Override
-    public String getSearch(String array) {
+    public String getFullSearch(String array) {
         List keywords = new Gson().fromJson(array, ArrayList.class);
         List<List<String>> datatablesItemList;
         try {
@@ -74,8 +58,11 @@ public class ItemService implements Service<ItemRequest> {
         }
     }
 
-    @Override
-    public String getAllAsDatatablesFormat() {
+    public String getBasicSearch(String array) {
+        return ""; //TODO busqueda basica
+    };
+
+    public String getAll() {
         List<List<String>> datatablesItemList;
         try {
             List<Item> itemList = itemDao.read();
@@ -95,15 +82,6 @@ public class ItemService implements Service<ItemRequest> {
         }
     }
 
-    /*@Override
-    public String getAllAsDatatablesFormat() {
-         List<Map<String,String>> datatablesObject;
-        try {
-            List<Item> itemList = itemDao.read();
-            return "{\"data\":"+ new Gson().toJson(itemList) +"}"; //TODO ver algo mejor para esto (o no)
-        } catch (SQLException ex) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
-        }
-    }*/
+
 
 }

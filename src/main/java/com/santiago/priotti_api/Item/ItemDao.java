@@ -5,30 +5,29 @@
  */
 package com.santiago.priotti_api.Item;
 
-import com.santiago.priotti_api.Interfaces.Dao;
 import com.santiago.priotti_api.MySql.MySqlConnector;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author santiago
  */
-public class ItemDao extends MySqlConnector implements Dao<Item> {
+public class ItemDao extends MySqlConnector {
 
     public static final int LIMIT = 100;
     public static final String TABLE = "productos";
 
-    @Override
     public List<Item> read() throws SQLException {
         return select(LIMIT);
     }
 
-    @Override
     public void update(List<Item> updatedList) throws SQLException {
         long lStartTime = new Date().getTime(); // start time
         List<Item> dbList = select(0);
@@ -62,12 +61,10 @@ public class ItemDao extends MySqlConnector implements Dao<Item> {
         System.out.println("Inserts: " + inserts);
     }
 
-    @Override
     public void create(Item newElement) throws SQLException {
 
     }
 
-    @Override
     public List<Item> search(List keywords) throws SQLException {
         String query = new ItemQueryBuilder().build(keywords);
         query = query+" LIMIT "+LIMIT;

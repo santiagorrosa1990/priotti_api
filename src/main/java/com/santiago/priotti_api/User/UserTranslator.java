@@ -1,28 +1,27 @@
-package com.santiago.priotti_api.Item;
+package com.santiago.priotti_api.User;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.santiago.priotti_api.Interfaces.Translator;
+import com.santiago.priotti_api.Item.Item;
 import spark.Request;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class ItemTranslator implements Translator<Item, ItemRequest> {
+public class UserTranslator implements Translator<User, UserRequest> {
 
     @Override
-    public List<Item> translateList(String body) { //TODO debe ir el request acá
+    public List<User> translateList(String body) { //TODO debe ir el request acá
         Gson gson = new Gson();
         Type type = new TypeToken<List<Item>>() {}.getType();
         return gson.fromJson(body, type);
     }
 
-    public ItemRequest translate(Request request){
+    @Override
+    public UserRequest translate(Request request){
         Gson gson = new Gson();
-        return gson.fromJson(request.body(), ItemRequest.class);
+        return gson.fromJson(request.body(), UserRequest.class);
     }
 
-    public Item translateSearchRequest(String body, String p) {
-        return null;
-    }
 }

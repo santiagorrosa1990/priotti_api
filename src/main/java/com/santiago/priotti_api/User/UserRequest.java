@@ -1,23 +1,21 @@
-package com.santiago.priotti_api.Item;
+package com.santiago.priotti_api.User;
 
 import com.google.gson.annotations.SerializedName;
 import com.santiago.priotti_api.Interfaces.IRequest;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-public class ItemRequest implements IRequest {
+@Builder
+public class UserRequest implements IRequest {
 
-    @SerializedName("username")  //TODO username y password deben ser un objeto credentials
-    String username;
+    @SerializedName("username")
+    private String username;
     @SerializedName("password")
-    String password;
-    @SerializedName("keywords")
-    String keywords;
-
-    //TODO aplicar novedad y oferta
+    private String password;
 
     public boolean hasCredentials() {
         return !username.isEmpty() && !password.isEmpty();
@@ -35,7 +33,5 @@ public class ItemRequest implements IRequest {
     public Map<String, String> getPayload() {
         return new HashMap<>();
     }
-
-
 
 }

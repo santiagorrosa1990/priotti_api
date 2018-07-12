@@ -10,6 +10,4 @@ public interface Translator<T, Q> {
 
     Q translate(Request request);
 
-    T translateSearchRequest(String body, String p);
-
 }
