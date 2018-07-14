@@ -2,9 +2,11 @@ package com.santiago.priotti_api.Item;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
+import com.santiago.priotti_api.Interfaces.IRequest;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
 import com.santiago.priotti_api.User.UserAuthenticator;
+import com.santiago.priotti_api.Wrappers.RequestWrapper;
 import spark.Request;
 import spark.Response;
 
@@ -21,7 +23,7 @@ public class ItemController {
 
 
     public String getAll(Request request, Response response) {
-        response.type("application/json");
+        response.type("application/json"); //TODO no deberia usarse nunca esto
         //if(authenticator.authenticate(request)){
         return itemService.getAll();
         //}
@@ -37,12 +39,11 @@ public class ItemController {
 
     public String search(Request request, Response response) {
         response.type("application/json");
+        RequestWrapper wrapper = new RequestWrapper(request);
         try {
-            ItemRequest itemRequest = new ItemTranslator().translate(request);
-            //if (authenticator.authenticate(itemRequest)) {      //TODO implementar interfaz ApiRequest con getCredentials();
-                return itemService.getFullSearch(itemRequest.getKeywords()); //TODO ver que mierda hacer con las interfaces
-            //}
-           // return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
+            ItemRequest itemRequest = new ItemTranslator().translate(wrapper.getBody());
+            if (authenticator.authenticate(wrapper.getCredentials())) return itemService.getFullSearch(itemRequest);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
         } catch (Exception e) {
             e.printStackTrace();
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad ApiRequest"));

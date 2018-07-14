@@ -19,9 +19,9 @@ public class UserTranslator implements Translator<User, UserRequest> {
     }
 
     @Override
-    public UserRequest translate(Request request){
+    public UserRequest translate(String body){
         Gson gson = new Gson();
-        return gson.fromJson(request.body(), UserRequest.class);
+        return gson.fromJson(body, UserRequest.class);
     }
 
 }

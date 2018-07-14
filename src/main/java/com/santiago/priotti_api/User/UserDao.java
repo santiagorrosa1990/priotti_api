@@ -5,7 +5,6 @@ import com.santiago.priotti_api.MySql.MySqlConnector;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao extends MySqlConnector {
@@ -18,11 +17,12 @@ public class UserDao extends MySqlConnector {
     }
 
     private List<User> select(String username) throws SQLException {
-        List<User> itemList = new ArrayList<>();
+        String query = "SELECT * FROM "+TABLE+" WHERE idusuario = '"+username+"'";
         Statement st = connect();
         ResultSet rs;
-        rs = st.executeQuery("SELECT * FROM " + TABLE + " LIMIT " + LIMIT);
+        rs = st.executeQuery(query);
+        List<User> userList = new UserInterpreter().interpret(rs);
         close();
-        return new UserInterpreter().interpret(rs);
+        return  userList;
     }
 }

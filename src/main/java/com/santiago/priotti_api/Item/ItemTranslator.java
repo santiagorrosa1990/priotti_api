@@ -3,7 +3,6 @@ package com.santiago.priotti_api.Item;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.santiago.priotti_api.Interfaces.Translator;
-import spark.Request;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -17,9 +16,8 @@ public class ItemTranslator implements Translator<Item, ItemRequest> {
         return gson.fromJson(body, type);
     }
 
-    public ItemRequest translate(Request request){
-        Gson gson = new Gson();
-        return gson.fromJson(request.body(), ItemRequest.class);
+    public ItemRequest translate(String body){
+        return new Gson().fromJson(body, ItemRequest.class);
     }
 
     public Item translateSearchRequest(String body, String p) {

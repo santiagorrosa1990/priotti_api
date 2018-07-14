@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import com.santiago.priotti_api.Interfaces.IRequest;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
+import com.santiago.priotti_api.Wrappers.RequestWrapper;
 import spark.Request;
 import spark.Response;
 
@@ -18,11 +19,17 @@ public class UserController {
     }
 
     public String login(Request request, Response response) {
-        response.type("application/json");
-        IRequest userRequest = new UserTranslator().translate(request);
-        if(authenticator.authenticate(userRequest)){
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, "Login ok"));
+        try{
+            RequestWrapper wrapper = new RequestWrapper(request);
+            response.type("application/json");
+            if(authenticator.authenticate(wrapper.getCredentials())){
+                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, "Login success"));
+            }
+            response.status(403);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Invalid credentials"));
+        }catch(Exception e){
+            response.status(400);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad request: "+e.getMessage()));
         }
-        return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Login error"));
     }
 }

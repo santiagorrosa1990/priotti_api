@@ -7,6 +7,7 @@ package com.santiago.priotti_api.Item;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
+import com.santiago.priotti_api.Interfaces.IRequest;
 import com.santiago.priotti_api.Interfaces.Translator;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
@@ -37,11 +38,12 @@ public class ItemService {
         }
     }
 
-    public String getFullSearch(String array) {
-        List keywords = new Gson().fromJson(array, ArrayList.class);
+    public String getFullSearch(ItemRequest request) {
+        String keywords = request.getKeywords();
+        List terms = new Gson().fromJson(keywords, ArrayList.class);
         List<List<String>> datatablesItemList;
         try {
-            List<Item> itemList = itemDao.search(keywords); //TODO esto debería ir en un presenter (?)
+            List<Item> itemList = itemDao.search(terms); //TODO esto debería ir en un presenter (?)
             datatablesItemList = itemList.stream().map(item -> Arrays.asList(
                     item.getCodigo(),
                     item.getAplicacion(),
