@@ -42,8 +42,8 @@ public class ItemController {
         RequestWrapper wrapper = new RequestWrapper(request);
         try {
             ItemRequest itemRequest = new ItemTranslator().translate(wrapper.getBody());
-            if (authenticator.authenticate(wrapper.getCredentials())) return itemService.getFullSearch(itemRequest);
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
+            /*if (authenticator.authenticate(wrapper.getCredentials()))*/ return itemService.getFullSearch(itemRequest);
+            //return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
         } catch (Exception e) {
             e.printStackTrace();
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad ApiRequest"));
