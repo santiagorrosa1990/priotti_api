@@ -5,6 +5,8 @@ import lombok.Getter;
 @Getter
 public class ItemRequest {
 
-    String keywords;
+    private String keywords; //TODO iria una lista de string
+    private Boolean novelty;
+    private Boolean offer;
 
 }

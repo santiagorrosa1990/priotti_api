@@ -7,13 +7,11 @@ package com.santiago.priotti_api.Item;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
-import com.santiago.priotti_api.Interfaces.IRequest;
 import com.santiago.priotti_api.Interfaces.Translator;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,31 +36,33 @@ public class ItemService {
         }
     }
 
-    public String getFullSearch(ItemRequest request) {
-        String keywords = request.getKeywords();
-        List terms = new Gson().fromJson(keywords, ArrayList.class);
-        List<List<String>> datatablesItemList;
+    public String fullSearch(ItemRequest request) {
+        Boolean novelty = request.getNovelty();
+        Boolean offer = request.getOffer();
+        List keywords = getKeywords(request.getKeywords());
+        String query = new ItemQueryBuilder().build(keywords, offer, novelty);
         try {
-            List<Item> itemList = itemDao.search(terms); //TODO esto debería ir en un presenter (?)
-            datatablesItemList = itemList.stream().map(item -> Arrays.asList(
-                    item.getCodigo(),
-                    item.getAplicacion(),
-                    item.getRubro(),
-                    item.getMarca(),
-                    item.getInfo(),
-                    "$"+item.getPrecioLista().toString(),
-                    "$"+item.getPrecioOferta().toString(),
-                    item.getImagen()))
-                    .collect(Collectors.toList());
-            return new Gson().toJson(datatablesItemList);
+            List<Item> itemList = itemDao.search(query);
+            return new ItemPresenter().fullTable(itemList);
+
         } catch (SQLException ex) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
         }
     }
 
-    public String getBasicSearch(String array) {
-        return ""; //TODO busqueda basica
-    };
+    public String basicSearch(ItemRequest request) {
+        Boolean novelty = request.getNovelty();
+        Boolean offer = request.getOffer();
+        List keywords = getKeywords(request.getKeywords());
+        String query = new ItemQueryBuilder().build(keywords, offer, novelty);
+        try {
+            List<Item> itemList = itemDao.search(query);
+            return new ItemPresenter().basicTable(itemList);
+
+        } catch (SQLException ex) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
+        }
+    }
 
     public String getAll() {
         List<List<String>> datatablesItemList;
@@ -82,6 +82,11 @@ public class ItemService {
         } catch (SQLException ex) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
         }
+    }
+
+    private List<String> getKeywords(String search){
+        String[] words = search.split("\\s+");
+        return Arrays.asList(words);
     }
 
 

@@ -37,18 +37,35 @@ public class ItemController {
 
     }
 
-    public String search(Request request, Response response) {
+    public String full(Request request, Response response) {
         response.type("application/json");
         RequestWrapper wrapper = new RequestWrapper(request);
         try {
             ItemRequest itemRequest = new ItemTranslator().translate(wrapper.getBody());
-            /*if (authenticator.authenticate(wrapper.getCredentials()))*/ return itemService.getFullSearch(itemRequest);
-            //return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
+            if (authenticator.verify(wrapper.getToken())) return itemService.fullSearch(itemRequest);
+            response.status(403);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
         } catch (Exception e) {
             e.printStackTrace();
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad ApiRequest"));
+            response.status(400);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
         }
     }
+
+    public String basic(Request request, Response response) {
+        response.type("application/json");
+        RequestWrapper wrapper = new RequestWrapper(request);
+        try {
+            ItemRequest itemRequest = new ItemTranslator().translate(wrapper.getBody());
+            return itemService.basicSearch(itemRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.status(400);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
+        }
+    }
+
+
 
     //TODO en esta capa debe ir la autenticación de usuario y la encriptación
 }

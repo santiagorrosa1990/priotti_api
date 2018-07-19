@@ -21,7 +21,7 @@ public class UserController {
         try{
             RequestWrapper wrapper = new RequestWrapper(request);
             response.type("application/json");
-            String token = authenticator.authenticate(wrapper.getCredentials());
+            String token = authenticator.buildToken(wrapper.getCredentials());
             if(token.isEmpty()){
                 response.status(403);
                 return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Invalid credentials"));

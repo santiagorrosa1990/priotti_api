@@ -9,6 +9,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.inject.Inject;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserAuthenticator {
 
@@ -19,13 +20,9 @@ public class UserAuthenticator {
         this.service = service;
     }
 
-    public String authenticate(Credentials credentials) {
+    public String buildToken(Credentials credentials) {
         List<User> users = service.get(credentials.getUsername());
-        if (users.size() == 1 && credentials.matches(users.get(0))) {
-            String jwt = createToken(users.get(0));
-            verify(jwt);
-            return jwt;//users.get(0).getFirstname();
-        }
+        if (users.size() == 1 && credentials.matches(users.get(0))) return Optional.ofNullable(createToken(users.get(0))).orElse("");
         return "";
     }
 
@@ -37,21 +34,22 @@ public class UserAuthenticator {
                     .withClaim("username", user.getFirstname())
                     .sign(algorithm);
         } catch (JWTCreationException exception){
-            return "";
-            //Invalid Signing configuration / Couldn't convert Claims.
+            return null;
         }
     }
 
-    private void verify(String token){
+    public Boolean verify(String token){
         try {
             Algorithm algorithm = Algorithm.HMAC256("RE$$TFDLS");
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer("priotti")
                     .build(); //Reusable verifier instance
-            DecodedJWT jwt = verifier.verify(token);
-            System.out.println(jwt.getClaim("username").asString());
+            verifier.verify(token);
+            return true;
         } catch (JWTVerificationException exception){
             System.out.println("Invalid token");
+            return false;
         }
     }
+
 }

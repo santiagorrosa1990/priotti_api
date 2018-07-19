@@ -65,8 +65,7 @@ public class ItemDao extends MySqlConnector {
 
     }
 
-    public List<Item> search(List keywords) throws SQLException {
-        String query = new ItemQueryBuilder().build(keywords);
+    public List<Item> search(String query) throws SQLException {
         query = query+" LIMIT "+LIMIT;
         Statement st = connect();
         ResultSet rs = st.executeQuery(query);

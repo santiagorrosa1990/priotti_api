@@ -33,14 +33,15 @@ public class Router {
 
         post("/item/all", itemController::updateAll);
 
-        post("/item/search", itemController::search);
+        post("/item/full", itemController::full);
+
+        post("/item/basic", itemController::basic);
 
         post("/login", userController::login);
 
         get("/ping",(request, response) -> "pong");
 
         //TODO post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {
-
 
     }
 
