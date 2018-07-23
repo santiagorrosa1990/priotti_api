@@ -2,6 +2,7 @@ package com.santiago.priotti_api.Item;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
+import com.santiago.priotti_api.Cart.CartRequest;
 import com.santiago.priotti_api.Interfaces.IRequest;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
@@ -23,7 +24,7 @@ public class ItemController {
 
 
     public String getAll(Request request, Response response) {
-        response.type("application/json"); //TODO no deberia usarse nunca esto
+        response.type("application/json"); //TODO solo para descarga de la lista
         //if(authenticator.authenticate(request)){
         return itemService.getAll();
         //}
@@ -65,6 +66,50 @@ public class ItemController {
         }
     }
 
+    public String editCart(Request request, Response response){
+        response.type("application/json");
+        RequestWrapper wrapper = new RequestWrapper(request);
+        try {
+            CartRequest cartRequest = new ItemTranslator().translateCart(wrapper.getBody());
+            if (authenticator.verify(wrapper.getToken())) return itemService.cartAddOrRemove(cartRequest);
+            response.status(403);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.status(400);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
+        }
+    }
+
+    public String getCart(Request request, Response response){
+        response.type("application/json");
+        RequestWrapper wrapper = new RequestWrapper(request);
+        try {
+            CartRequest cartRequest = new ItemTranslator().translateCart(wrapper.getBody());
+            if (authenticator.verify(wrapper.getToken())) return itemService.getOrder(cartRequest);
+            response.status(403);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.status(400);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
+        }
+    }
+
+    public Object emailOrder(Request request, Response response) {
+        response.type("application/json");
+        RequestWrapper wrapper = new RequestWrapper(request);
+        try {
+            CartRequest cartRequest = new ItemTranslator().translateCart(wrapper.getBody());
+            if (authenticator.verify(wrapper.getToken())) return itemService.sendOrderEmail(cartRequest);
+            response.status(403);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.status(400);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
+        }
+    }
 
 
     //TODO en esta capa debe ir la autenticación de usuario y la encriptación

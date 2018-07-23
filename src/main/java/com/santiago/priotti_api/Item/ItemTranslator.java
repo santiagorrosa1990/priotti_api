@@ -2,6 +2,7 @@ package com.santiago.priotti_api.Item;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.santiago.priotti_api.Cart.CartRequest;
 import com.santiago.priotti_api.Interfaces.Translator;
 
 import java.lang.reflect.Type;
@@ -20,7 +21,7 @@ public class ItemTranslator implements Translator<Item, ItemRequest> {
         return new Gson().fromJson(body, ItemRequest.class);
     }
 
-    public Item translateSearchRequest(String body, String p) {
-        return null;
+    public CartRequest translateCart(String body){
+        return new Gson().fromJson(body, CartRequest.class);
     }
 }

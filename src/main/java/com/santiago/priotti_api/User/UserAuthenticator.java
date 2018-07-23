@@ -31,7 +31,8 @@ public class UserAuthenticator {
             Algorithm algorithm = Algorithm.HMAC256("RE$$TFDLS");
             return JWT.create()
                     .withIssuer("priotti")
-                    .withClaim("username", user.getFirstname())
+                    .withClaim("username", user.getName())
+                    .withClaim("id", user.getId())
                     .sign(algorithm);
         } catch (JWTCreationException exception){
             return null;

@@ -14,10 +14,11 @@ public class UserInterpreter implements Interpreter<User> {
         List<User> userList = new ArrayList<>();
         while (rs.next()) {
             userList.add(User.builder()
-                    .username(rs.getString("idusuario").trim())
-                    .password(rs.getString("clave").trim())
-                    .firstname(rs.getString("nombre").trim())
-                    .lastname(rs.getString("apellido").trim())
+                    .id(rs.getInt("id"))
+                    .name(rs.getString("nombre").trim())
+                    .number(rs.getString("numero").trim())
+                    .cuit(rs.getString("cuit").trim())
+                    .coeficient(rs.getBigDecimal("porcentajeaumento"))
                     .build());
         }
         return userList;

@@ -37,6 +37,12 @@ public class Router {
 
         post("/item/basic", itemController::basic);
 
+        post("/item/updcart", itemController::editCart);
+
+        post("/item/getcart", itemController::getCart);
+
+        post("/item/emailorder", itemController::emailOrder);
+
         post("/login", userController::login);
 
         get("/ping",(request, response) -> "pong");

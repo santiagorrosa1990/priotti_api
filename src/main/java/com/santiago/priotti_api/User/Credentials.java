@@ -11,7 +11,7 @@ public class Credentials {
     private String password;
 
     public Boolean matches(User user) {
-        return this.username.equals(user.getUsername()) && this.password.equals(user.getPassword());
+        return this.username.equals(user.getNumber()) && this.password.equals(user.getCuit());
     }
 
 }

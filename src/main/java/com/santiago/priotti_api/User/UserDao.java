@@ -10,14 +10,14 @@ import java.util.List;
 public class UserDao extends MySqlConnector {
 
     public static final Integer LIMIT = 100;
-    public static final String TABLE = "usuario";
+    public static final String TABLE = "clientes"; //TODO eliminar tabla usuario y renombrar la de clientes
 
     public List<User> get(String username) throws SQLException {
         return select(username);
     }
 
     private List<User> select(String username) throws SQLException {
-        String query = "SELECT * FROM "+TABLE+" WHERE idusuario = '"+username+"'";
+        String query = "SELECT * FROM "+TABLE+" WHERE numero = '"+username+"'";
         Statement st = connect();
         ResultSet rs;
         rs = st.executeQuery(query);

@@ -5,16 +5,18 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 @Builder
 @ToString
 @Getter
 @EqualsAndHashCode
 public class User {
 
-    private String username;
-    private String password;
-    private String firstname;
-    private String lastname;
-    private String[] emails;
+    private Integer id;
+    private String name;
+    private String number;
+    private String cuit;
+    private BigDecimal coeficient;
 
 }
