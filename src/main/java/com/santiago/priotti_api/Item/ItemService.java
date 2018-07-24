@@ -15,6 +15,7 @@ import com.santiago.priotti_api.StandardResponse.StatusResponse;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
@@ -46,10 +47,11 @@ public class ItemService {
         Boolean novelty = request.getNovelty();
         Boolean offer = request.getOffer();
         List keywords = getKeywords(request.getKeywords());
+        BigDecimal coeficient = request.getCoeficient();
         String query = new ItemQueryBuilder().build(keywords, offer, novelty);
         try {
             List<Item> itemList = itemDao.search(query);
-            return new ItemPresenter().fullTable(itemList);
+            return new ItemPresenter().fullTable(itemList, coeficient);
 
         } catch (SQLException ex) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
@@ -107,6 +109,14 @@ public class ItemService {
     public String getOrder(CartRequest cartRequest) {
         try {
             return itemDao.getOrder(cartRequest);
+        } catch (SQLException ex) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
+        }
+    }
+
+    public String getOrderHistory(CartRequest cartRequest){
+        try {
+            return new Gson().toJson(itemDao.getOrderHistory(cartRequest));
         } catch (SQLException ex) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
         }

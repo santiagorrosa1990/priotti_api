@@ -12,6 +12,7 @@ import com.santiago.priotti_api.MySql.MySqlConnector;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -174,7 +175,8 @@ public class ItemDao extends MySqlConnector {
         ResultSet rs = getFromCart(request);
         List<List<String>> list = split(rs);
         Statement st = connect();
-        String query = "UPDATE pedidos SET estado = 'LISTO' WHERE cliente = " + request.getId();
+        String query = "UPDATE pedidos SET estado = 'LISTO', " +
+                "fechapedido = '"+ LocalDateTime.now() +"' WHERE cliente = " + request.getId()+" AND estado = 'PENDIENTE'";
         st.executeUpdate(query);
         close();
         return list;
@@ -184,6 +186,20 @@ public class ItemDao extends MySqlConnector {
         return Arrays.asList(item.split("&"));
     }
 
+    public List getOrderHistory(CartRequest request) throws SQLException {
+        String select = "SELECT * FROM pedidos WHERE cliente = " + request.getId() + " AND estado= 'LISTO'";
+        Statement st = connect();
+        ResultSet rs = st.executeQuery(select);
+        List<List<String>> historyList = new ArrayList<>();
+        while(rs.next()){
+            String date = rs.getString("fechapedido");
+            String items = rs.getString("items").replace("&","--")
+                    .replace(",", "<br>");
+            historyList.add(Arrays.asList(date, items));
+        }
+        close();
+        return historyList;
+    }
 }
 
 

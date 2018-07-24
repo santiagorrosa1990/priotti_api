@@ -41,6 +41,8 @@ public class Router {
 
         post("/item/getcart", itemController::getCart);
 
+        post("/item/carthist", itemController::getOrderHistory);
+
         post("/item/emailorder", itemController::emailOrder);
 
         post("/login", userController::login);
@@ -48,6 +50,9 @@ public class Router {
         get("/ping",(request, response) -> "pong");
 
         //TODO post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {
+        //TODO agregar coeficiente a los precios
+        //TODO meter toda la info del cliente en el token para que el usuario no la pueda ver
+        //TODO en el localstorage y que se decodifique cuando se deba usar algo Ej: coeficiente
 
     }
 

@@ -42,8 +42,10 @@ public class ItemController {
         response.type("application/json");
         RequestWrapper wrapper = new RequestWrapper(request);
         try {
-            ItemRequest itemRequest = new ItemTranslator().translate(wrapper.getBody());
-            if (authenticator.verify(wrapper.getToken())) return itemService.fullSearch(itemRequest);
+            if (wrapper.validToken()) {
+                ItemRequest itemRequest = new ItemTranslator().translate(wrapper.getFullBody());
+                return itemService.fullSearch(itemRequest);
+            }
             response.status(403);
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
         } catch (Exception e) {
@@ -57,7 +59,7 @@ public class ItemController {
         response.type("application/json");
         RequestWrapper wrapper = new RequestWrapper(request);
         try {
-            ItemRequest itemRequest = new ItemTranslator().translate(wrapper.getBody());
+            ItemRequest itemRequest = new ItemTranslator().translate(wrapper.getBasicBody());
             return itemService.basicSearch(itemRequest);
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,12 +68,15 @@ public class ItemController {
         }
     }
 
-    public String editCart(Request request, Response response){
+    public String editCart(Request request, Response response) {
         response.type("application/json");
         RequestWrapper wrapper = new RequestWrapper(request);
         try {
-            CartRequest cartRequest = new ItemTranslator().translateCart(wrapper.getBody());
-            if (authenticator.verify(wrapper.getToken())) return itemService.cartAddOrRemove(cartRequest);
+
+            if (wrapper.validToken()) {
+                CartRequest cartRequest = new ItemTranslator().translateCart(wrapper.getFullBody());
+                return itemService.cartAddOrRemove(cartRequest);
+            }
             response.status(403);
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
         } catch (Exception e) {
@@ -81,12 +86,31 @@ public class ItemController {
         }
     }
 
-    public String getCart(Request request, Response response){
+    public String getCart(Request request, Response response) {
         response.type("application/json");
         RequestWrapper wrapper = new RequestWrapper(request);
         try {
-            CartRequest cartRequest = new ItemTranslator().translateCart(wrapper.getBody());
-            if (authenticator.verify(wrapper.getToken())) return itemService.getOrder(cartRequest);
+            if (wrapper.validToken()) {
+                CartRequest cartRequest = new ItemTranslator().translateCart(wrapper.getFullBody());
+                return itemService.getOrder(cartRequest);
+            }
+            response.status(403);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.status(400);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
+        }
+    }
+
+    public String getOrderHistory(Request request, Response response) {
+        response.type("application/json");
+        RequestWrapper wrapper = new RequestWrapper(request);
+        try {
+            if (wrapper.validToken()) {
+                CartRequest cartRequest = new ItemTranslator().translateCart(wrapper.getFullBody());
+                return itemService.getOrderHistory(cartRequest);
+            }
             response.status(403);
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
         } catch (Exception e) {
@@ -100,8 +124,10 @@ public class ItemController {
         response.type("application/json");
         RequestWrapper wrapper = new RequestWrapper(request);
         try {
-            CartRequest cartRequest = new ItemTranslator().translateCart(wrapper.getBody());
-            if (authenticator.verify(wrapper.getToken())) return itemService.sendOrderEmail(cartRequest);
+            if (wrapper.validToken()) {
+                CartRequest cartRequest = new ItemTranslator().translateCart(wrapper.getFullBody());
+                return itemService.sendOrderEmail(cartRequest);
+            }
             response.status(403);
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
         } catch (Exception e) {

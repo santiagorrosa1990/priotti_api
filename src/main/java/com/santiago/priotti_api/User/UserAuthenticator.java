@@ -5,7 +5,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.inject.Inject;
 
 import java.util.List;
@@ -33,6 +32,7 @@ public class UserAuthenticator {
                     .withIssuer("priotti")
                     .withClaim("username", user.getName())
                     .withClaim("id", user.getId())
+                    .withClaim("co", user.getCoeficient().toString())
                     .sign(algorithm);
         } catch (JWTCreationException exception){
             return null;
