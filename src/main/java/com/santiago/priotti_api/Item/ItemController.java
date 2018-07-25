@@ -3,7 +3,6 @@ package com.santiago.priotti_api.Item;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.santiago.priotti_api.Cart.CartRequest;
-import com.santiago.priotti_api.Interfaces.IRequest;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
 import com.santiago.priotti_api.User.UserAuthenticator;

@@ -25,6 +25,12 @@ public class UserAuthenticator {
         return "";
     }
 
+    public String buildAdminToken(Credentials credentials) {
+        List<User> users = service.get(credentials.getUsername());
+        if (users.size() == 1 && credentials.matches(users.get(0))) return Optional.ofNullable(createToken(users.get(0))).orElse("");
+        return "";
+    }
+
     private String createToken(User user){
         try {
             Algorithm algorithm = Algorithm.HMAC256("RE$$TFDLS");
@@ -52,5 +58,6 @@ public class UserAuthenticator {
             return false;
         }
     }
+
 
 }

@@ -33,4 +33,22 @@ public class UserController {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad request: "+e.getMessage()));
         }
     }
+
+    public String adminLogin(Request request, Response response) { //TODO SEGUIR
+        try{
+            RequestWrapper wrapper = new RequestWrapper(request);
+            response.type("application/json");
+            String token = authenticator.buildAdminToken(wrapper.getCredentials());
+            if(token.isEmpty()){
+                response.status(403);
+                return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Invalid credentials"));
+            }
+            response.type("text");
+            return token; //TODO ver tipo de respuesta
+        }catch(Exception e){
+            response.status(400);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad request: "+e.getMessage()));
+        }
+    }
+
 }

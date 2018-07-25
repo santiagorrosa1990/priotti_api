@@ -47,6 +47,8 @@ public class Router {
 
         post("/login", userController::login);
 
+        post("/adminlogin", userController::adminLogin);
+
         get("/ping",(request, response) -> "pong");
 
         //TODO post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {
