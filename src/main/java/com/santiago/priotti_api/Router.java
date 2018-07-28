@@ -31,9 +31,11 @@ public class Router {
 
         get("/item", itemController::getAll);
 
-        post("/item/all", itemController::updateAll);
+        post("/item/updateall", itemController::updateAll);
 
         post("/item/full", itemController::full);
+
+        post("/item/update", itemController::update);
 
         post("/item/basic", itemController::basic);
 
@@ -49,12 +51,17 @@ public class Router {
 
         post("/adminlogin", userController::adminLogin);
 
+        post("/user/list", userController::getList);
+
         get("/ping",(request, response) -> "pong");
 
         //TODO post("/personas/:nom/:ape/:eda/:dni", (request, response) -> {
         //TODO agregar coeficiente a los precios
         //TODO meter toda la info del cliente en el token para que el usuario no la pueda ver
         //TODO en el localstorage y que se decodifique cuando se deba usar algo Ej: coeficiente
+        //TODO ver que pasa con usuario: test, test que tira expecion de carrito
+        //TODO agregar visitas al login
+        //TODO agregar fechas de actualizacion de lista y oferta
 
     }
 

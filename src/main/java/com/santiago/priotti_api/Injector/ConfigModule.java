@@ -25,7 +25,7 @@ public class ConfigModule extends AbstractModule {
         bind(UserAuthenticator.class);
         bind(ItemController.class);
         bind(ItemDao.class);
-        bind(new TypeLiteral<Translator<Item, ItemRequest>>(){}).to(ItemTranslator.class);
+        bind(ItemTranslator.class);
         bind(UserService.class);
 
     }

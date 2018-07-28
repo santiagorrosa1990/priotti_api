@@ -26,18 +26,28 @@ import java.util.stream.Collectors;
 public class ItemService {
 
     private final ItemDao itemDao;
-    private final Translator<Item, ItemRequest> translator; // TODO ver si mandar el translator al controller
+    private final ItemTranslator translator; // TODO ver si mandar el translator al controller
 
     @Inject
-    public ItemService(ItemDao itemDao, Translator<Item, ItemRequest> translator) {
+    public ItemService(ItemDao itemDao, ItemTranslator translator) {
         this.itemDao = itemDao;
         this.translator = translator;
+    }
+
+    public String update(String body) {
+        Item item = translator.buildItem(body);
+        try {
+            itemDao.updateOne(item);
+        } catch (SQLException ex) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
+        }
+        return "Item actualizado"; //TODO devolver un standard response
     }
 
     public void updateAll(String body) {
         List<Item> itemsList = translator.translateList(body);
         try {
-            itemDao.update(itemsList);
+            itemDao.updateAll(itemsList);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -230,4 +240,5 @@ public class ItemService {
         }
 
     }
+
 }

@@ -2,6 +2,8 @@ package com.santiago.priotti_api.User;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
+import com.santiago.priotti_api.Cart.CartRequest;
+import com.santiago.priotti_api.Item.ItemTranslator;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
 import com.santiago.priotti_api.Wrappers.RequestWrapper;
@@ -11,9 +13,11 @@ import spark.Response;
 public class UserController {
 
     UserAuthenticator authenticator;
+    UserService userService;
 
     @Inject
-    public UserController(UserAuthenticator authenticator) {
+    public UserController(UserAuthenticator authenticator, UserService userService) {
+        this.userService = userService;
         this.authenticator = authenticator;
     }
 
@@ -51,4 +55,19 @@ public class UserController {
         }
     }
 
+    public String getList(Request request, Response response) {
+        response.type("application/json");
+        RequestWrapper wrapper = new RequestWrapper(request);
+        try {
+            if (wrapper.validToken()) {
+                return userService.getAll();
+            }
+            response.status(403);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.status(400);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
+        }
+    }
 }

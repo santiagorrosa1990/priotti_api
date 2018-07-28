@@ -25,11 +25,33 @@ public class ItemDao extends MySqlConnector {
     public static final int LIMIT = 100;
     public static final String TABLE = "productos";
 
+    //READ
+
     public List<Item> read() throws SQLException {
         return select(LIMIT);
     }
 
-    public void update(List<Item> updatedList) throws SQLException {
+    public List<Item> search(String query) throws SQLException {
+        query = query + " LIMIT " + LIMIT;
+        Statement st = connect();
+        ResultSet rs = st.executeQuery(query);
+        List<Item> itemList = new ItemInterpreter().interpret(rs);
+        close();
+        return itemList;
+    }
+
+    private List<Item> select(int limit) throws SQLException {
+        Statement st = connect();
+        ResultSet rs;
+        rs = st.executeQuery("SELECT * FROM " + TABLE + " LIMIT " + limit);
+        List<Item> itemList = new ItemInterpreter().interpret(rs);
+        close();
+        return itemList;
+    }
+
+    //UPDATE ALL FROM FILE
+
+    public void updateAll(List<Item> updatedList) throws SQLException {
         long lStartTime = new Date().getTime(); // start time
         List<Item> dbList = select(0);
         AtomicInteger updates = new AtomicInteger(0);
@@ -62,28 +84,10 @@ public class ItemDao extends MySqlConnector {
         System.out.println("Inserts: " + inserts);
     }
 
-    public List<Item> search(String query) throws SQLException {
-        query = query + " LIMIT " + LIMIT;
-        Statement st = connect();
-        ResultSet rs = st.executeQuery(query);
-        List<Item> itemList = new ItemInterpreter().interpret(rs);
-        close();
-        return itemList;
-    }
-
     private Map<String, Item> toMap(List<Item> list) {
         Map<String, Item> map = new HashMap<>();
         list.forEach(it -> map.put(it.getCodigo(), it));
         return map;
-    }
-
-    private List<Item> select(int limit) throws SQLException {
-        Statement st = connect();
-        ResultSet rs;
-        rs = st.executeQuery("SELECT * FROM " + TABLE + " LIMIT " + limit);
-        List<Item> itemList = new ItemInterpreter().interpret(rs);
-        close();
-        return itemList;
     }
 
     private void update(Item item, Statement st) throws SQLException {
@@ -105,6 +109,19 @@ public class ItemDao extends MySqlConnector {
                 "', " + item.getPrecioLista() + ")";
         st.executeUpdate(query);
     }
+
+    //UPDATE
+
+    public void updateOne(Item item) throws SQLException{
+        Statement st = connect();
+        String query = "UPDATE " + TABLE + " SET " +
+                "precio_oferta = '" + item.getPrecioOferta() +
+                "', info = '" + item.getInfo() +
+                "' WHERE codigo = '" + item.getCodigo() + "'";
+        st.executeUpdate(query);
+    }
+
+    //CART ABM
 
     public String removeFromCart(CartRequest request) throws SQLException {
         List<String> toBeRemoved = splitOnAmpersand(request.getItem());

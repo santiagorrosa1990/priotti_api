@@ -27,7 +27,7 @@ public class UserAuthenticator {
 
     public String buildAdminToken(Credentials credentials) {
         List<User> users = service.get(credentials.getUsername());
-        if (users.size() == 1 && credentials.matches(users.get(0))) return Optional.ofNullable(createToken(users.get(0))).orElse("");
+        if (users.size() == 1 && credentials.matches(users.get(0)) && users.get(0).getAdmin()) return Optional.ofNullable(createToken(users.get(0))).orElse("");
         return "";
     }
 

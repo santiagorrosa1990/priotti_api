@@ -21,6 +21,10 @@ public class ItemTranslator implements Translator<Item, ItemRequest> {
         return new Gson().fromJson(body, ItemRequest.class);
     }
 
+    public Item buildItem(String body){
+        return new Gson().fromJson(body, Item.class);
+    }
+
     public CartRequest translateCart(String body){
         return new Gson().fromJson(body, CartRequest.class);
     }

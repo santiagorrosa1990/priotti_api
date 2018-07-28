@@ -37,6 +37,22 @@ public class ItemController {
 
     }
 
+    public String update(Request request, Response response) {
+        response.type("application/json");
+        RequestWrapper wrapper = new RequestWrapper(request);
+        try {
+            if (wrapper.validToken()) {
+                return itemService.update(request.body());
+            }
+            response.status(403);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.status(400);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
+        }
+    }
+
     public String full(Request request, Response response) {
         response.type("application/json");
         RequestWrapper wrapper = new RequestWrapper(request);
@@ -119,7 +135,7 @@ public class ItemController {
         }
     }
 
-    public Object emailOrder(Request request, Response response) {
+    public String emailOrder(Request request, Response response) {
         response.type("application/json");
         RequestWrapper wrapper = new RequestWrapper(request);
         try {
@@ -135,6 +151,8 @@ public class ItemController {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
         }
     }
+
+
 
 
     //TODO en esta capa debe ir la autenticación de usuario y la encriptación

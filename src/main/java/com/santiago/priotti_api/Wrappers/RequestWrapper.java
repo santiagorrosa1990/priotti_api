@@ -51,7 +51,7 @@ public class RequestWrapper {
                     .build();
             String coeficient = verifier.verify(getToken()).getClaim("co").asString();
             Map body = gson.fromJson(request.body(), Map.class);
-            body.put("coeficient", coeficient);
+            body.put("coeficient", coeficient); //@Smell ver esto
             this.body = gson.toJson(body);
         } catch (JWTVerificationException exception){
             return false;
