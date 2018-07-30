@@ -24,4 +24,7 @@ public class UserTranslator implements Translator<User, UserRequest> {
         return gson.fromJson(body, UserRequest.class);
     }
 
+    public User buildUser(String body) {
+        return new Gson().fromJson(body, User.class);
+    }
 }

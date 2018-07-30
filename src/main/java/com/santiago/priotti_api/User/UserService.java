@@ -12,13 +12,15 @@ import java.util.List;
 public class UserService {
 
     UserDao dao;
+    private final UserTranslator translator; // TODO ver si mandar el translator al controller
 
     @Inject
-    public UserService(UserDao dao) {
+    public UserService(UserDao dao, UserTranslator translator) {
+        this.translator = translator;
         this.dao = dao;
     }
 
-    public List<User> get(String username){
+    public List<User> get(String username) {
         try {
             return dao.get(username);
         } catch (SQLException ex) {
@@ -35,5 +37,16 @@ public class UserService {
             ex.printStackTrace();
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
         }
+    }
+
+    public String update(String body) {
+        User user = translator.buildUser(body);
+        try {
+            dao.update(user);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
+        }
+        return "Item actualizado"; //TODO devolver un standard response
     }
 }

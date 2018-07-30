@@ -70,4 +70,20 @@ public class UserController {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
         }
     }
+
+    public String update(Request request, Response response) {
+        response.type("application/json");
+        RequestWrapper wrapper = new RequestWrapper(request);
+        try {
+            if (wrapper.validToken()) {
+                return userService.update(request.body());
+            }
+            response.status(403);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.status(400);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
+        }
+    }
 }

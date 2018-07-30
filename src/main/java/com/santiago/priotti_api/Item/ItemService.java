@@ -11,6 +11,7 @@ import com.santiago.priotti_api.Cart.CartRequest;
 import com.santiago.priotti_api.Interfaces.Translator;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
+import spark.Request;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -91,10 +92,7 @@ public class ItemService {
                     item.getAplicacion(),
                     item.getRubro(),
                     item.getMarca(),
-                    item.getInfo(),
-                    "$" + item.getPrecioLista().toString(), //TODO sacar el $ de aca
-                    "$" + item.getPrecioOferta().toString(),
-                    item.getImagen()))
+                    item.getPrecioLista().toString())) //TODO sacar el $ de aca
                     .collect(Collectors.toList());
             return new Gson().toJson(datatablesItemList);
         } catch (SQLException ex) {

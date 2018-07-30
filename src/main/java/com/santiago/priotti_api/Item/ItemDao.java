@@ -28,7 +28,7 @@ public class ItemDao extends MySqlConnector {
     //READ
 
     public List<Item> read() throws SQLException {
-        return select(LIMIT);
+        return select(20000);
     }
 
     public List<Item> search(String query) throws SQLException {
@@ -43,7 +43,7 @@ public class ItemDao extends MySqlConnector {
     private List<Item> select(int limit) throws SQLException {
         Statement st = connect();
         ResultSet rs;
-        rs = st.executeQuery("SELECT * FROM " + TABLE + " LIMIT " + limit);
+        rs = st.executeQuery("SELECT * FROM  " + TABLE + " ORDER BY marca, codigo LIMIT " + limit);
         List<Item> itemList = new ItemInterpreter().interpret(rs);
         close();
         return itemList;
@@ -108,17 +108,19 @@ public class ItemDao extends MySqlConnector {
                 "', '" + item.getMarca() +
                 "', " + item.getPrecioLista() + ")";
         st.executeUpdate(query);
+        close();
     }
 
     //UPDATE
 
-    public void updateOne(Item item) throws SQLException{
+    public void updateOne(Item item) throws SQLException {
         Statement st = connect();
         String query = "UPDATE " + TABLE + " SET " +
                 "precio_oferta = '" + item.getPrecioOferta() +
                 "', info = '" + item.getInfo() +
                 "' WHERE codigo = '" + item.getCodigo() + "'";
         st.executeUpdate(query);
+        close();
     }
 
     //CART ABM
@@ -193,7 +195,7 @@ public class ItemDao extends MySqlConnector {
         List<List<String>> list = split(rs);
         Statement st = connect();
         String query = "UPDATE pedidos SET estado = 'LISTO', " +
-                "fechapedido = '"+ LocalDateTime.now() +"' WHERE cliente = " + request.getId()+" AND estado = 'PENDIENTE'";
+                "fechapedido = '" + LocalDateTime.now() + "' WHERE cliente = " + request.getId() + " AND estado = 'PENDIENTE'";
         st.executeUpdate(query);
         close();
         return list;
@@ -208,9 +210,9 @@ public class ItemDao extends MySqlConnector {
         Statement st = connect();
         ResultSet rs = st.executeQuery(select);
         List<List<String>> historyList = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             String date = rs.getString("fechapedido");
-            String items = rs.getString("items").replace("&","--")
+            String items = rs.getString("items").replace("&", "--")
                     .replace(",", "<br>");
             historyList.add(Arrays.asList(date, items));
         }
