@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.santiago.priotti_api.User.Credentials;
 import spark.Request;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,9 +17,17 @@ public class RequestWrapper {
 
     Request request;
     String body;
+    String token;
 
     public RequestWrapper(Request request) {
         this.request = request;
+    }
+
+    public RequestWrapper(){}
+
+    public RequestWrapper withToken(String token){
+        this.token = token;
+        return this;
     }
 
     public Credentials getCredentials(){
@@ -51,6 +60,23 @@ public class RequestWrapper {
                     .build();
             String coeficient = verifier.verify(getToken()).getClaim("co").asString();
             Map body = gson.fromJson(request.body(), Map.class);
+            body.put("coeficient", coeficient); //@Smell ver esto
+            this.body = gson.toJson(body);
+        } catch (JWTVerificationException exception){
+            return false;
+        }
+        return true;
+    }
+
+    public Boolean validToken(String token) {
+        Gson gson = new Gson();
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("RE$$TFDLS");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("priotti")
+                    .build();
+            String coeficient = verifier.verify(token).getClaim("co").asString();
+            Map body = Optional.ofNullable(gson.fromJson(request.body(), Map.class)).orElse(new HashMap());
             body.put("coeficient", coeficient); //@Smell ver esto
             this.body = gson.toJson(body);
         } catch (JWTVerificationException exception){

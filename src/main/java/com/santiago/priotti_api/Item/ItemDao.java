@@ -43,17 +43,17 @@ public class ItemDao extends MySqlConnector {
     private List<Item> select(int limit) throws SQLException {
         Statement st = connect();
         ResultSet rs;
-        rs = st.executeQuery("SELECT * FROM  " + TABLE + " ORDER BY marca, codigo LIMIT " + limit);
+        rs = st.executeQuery("SELECT * FROM  " + TABLE + " LIMIT " + limit);
         List<Item> itemList = new ItemInterpreter().interpret(rs);
         close();
         return itemList;
     }
-
+// TODO ORDER BY marca, codigo
     //UPDATE ALL FROM FILE
 
     public void updateAll(List<Item> updatedList) throws SQLException {
         long lStartTime = new Date().getTime(); // start time
-        List<Item> dbList = select(0);
+        List<Item> dbList = select(20000);
         AtomicInteger updates = new AtomicInteger(0);
         AtomicInteger inserts = new AtomicInteger(0);
         Map<String, Item> outdatedList = toMap(dbList);
@@ -63,14 +63,15 @@ public class ItemDao extends MySqlConnector {
             try {
                 if (outdatedList.containsKey(it.getCodigo())) {
                     if (!outdatedList.get(it.getCodigo()).equals(it)) {
-                        //System.out.println("Updated  " + it);
+                        System.out.println(outdatedList.get(it.getCodigo()).equals(it));
+                        System.out.println("New  " + it);
+                        System.out.println("Old  " + outdatedList.get(it.getCodigo()));
                         updates.getAndIncrement();
                         update(it, st);
                     }
                 } else {
                     insert(it, st);
                     inserts.getAndIncrement();
-                    //System.out.println("Inserted " + it.toString());
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage() + " " + e.getClass());

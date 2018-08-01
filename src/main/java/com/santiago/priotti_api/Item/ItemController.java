@@ -7,8 +7,16 @@ import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
 import com.santiago.priotti_api.User.UserAuthenticator;
 import com.santiago.priotti_api.Wrappers.RequestWrapper;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import spark.Request;
 import spark.Response;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ItemController {
 
@@ -152,7 +160,22 @@ public class ItemController {
         }
     }
 
+    public Object getXlsx(Request request, Response response) {
+        RequestWrapper wrapper = new RequestWrapper(request);
+        try {
+            if (wrapper.validToken(request.queryParams("tkn"))) {
+                ItemRequest itemRequest = new ItemTranslator().translate(wrapper.getFullBody());
+                return itemService.buildXlsx(response, itemRequest);
+            }
+            response.status(403);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.status(400);
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad Request"));
+        }
 
+    }
 
 
     //TODO en esta capa debe ir la autenticación de usuario y la encriptación

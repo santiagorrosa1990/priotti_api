@@ -8,26 +8,32 @@ package com.santiago.priotti_api.Item;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.santiago.priotti_api.Cart.CartRequest;
-import com.santiago.priotti_api.Interfaces.Translator;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;
+import com.santiago.priotti_api.Wrappers.RequestWrapper;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import spark.Request;
+import spark.Response;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ItemService {
 
     private final ItemDao itemDao;
-    private final ItemTranslator translator; // TODO ver si mandar el translator al controller
+    private final ItemTranslator translator;
 
     @Inject
     public ItemService(ItemDao itemDao, ItemTranslator translator) {
@@ -92,7 +98,7 @@ public class ItemService {
                     item.getAplicacion(),
                     item.getRubro(),
                     item.getMarca(),
-                    item.getPrecioLista().toString())) //TODO sacar el $ de aca
+                    item.getPrecioLista().toString()))
                     .collect(Collectors.toList());
             return new Gson().toJson(datatablesItemList);
         } catch (SQLException ex) {
@@ -118,6 +124,7 @@ public class ItemService {
         try {
             return itemDao.getOrder(cartRequest);
         } catch (SQLException ex) {
+            ex.printStackTrace();
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
         }
     }
@@ -238,5 +245,38 @@ public class ItemService {
         }
 
     }
+
+    //EXP
+
+    public Object buildXlsx(Response response, ItemRequest request){
+        BigDecimal coeficient = request.getCoeficient();
+        coeficient = coeficient.divide(new BigDecimal(100)).add(new BigDecimal(1));
+        String date = LocalDateTime.now().toString();
+        response.raw().setContentType("application/octet-stream");
+        response.raw().setHeader("Content-Disposition","attachment; filename=lista_priotti_"+date+".xlsx");
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Lista de Precios");
+        try {
+            int rowNum = 0;
+            List<Item> list = itemDao.read();
+            for (Item item : list) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(item.getCodigo());
+                row.createCell(1).setCellValue(item.getMarca());
+                row.createCell(2).setCellValue(item.getRubro());
+                row.createCell(3).setCellValue(item.getAplicacion());
+                row.createCell(4).setCellValue(new Double(item.getPrecioLista().multiply(coeficient).toString()));
+            }
+
+            workbook.write(response.raw().getOutputStream());
+            workbook.close();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Xlsx file created!");
+        return response.raw();
+    }
+
+
 
 }

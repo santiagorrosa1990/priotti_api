@@ -57,12 +57,14 @@ public class Router {
 
         get("/ping",(request, response) -> "pong");
 
-        //TODO ver que pasa con usuario: test, test que tira expecion de carrito
+        get("/xls", itemController::getXlsx);
+
         //TODO agregar visitas al login
         //TODO agregar fechas de actualizacion de lista y oferta
         //TODO validar creacion y edicion de clientes
-        //TODO coeficiente en lista xlsx
-        //TODO Dividir index.js en varios archivos
+        //TODO dividir index.js en varios archivos
+
+        //TODO VER QUE MIERDA PASO CON UPDATER (VER HASH DE ITEM)
 
     }
 
