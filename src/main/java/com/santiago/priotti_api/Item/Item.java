@@ -23,24 +23,20 @@ import java.util.Date;
 @EqualsAndHashCode
 public class Item {
 
-    @EqualsAndHashCode.Include
-    private String codigo;
-    @EqualsAndHashCode.Include
-    private String aplicacion;
-    @EqualsAndHashCode.Include
-    private String rubro;
-    @EqualsAndHashCode.Include
-    private String marca;
-    @EqualsAndHashCode.Include
+    @EqualsAndHashCode.Include private String codigo;
+    @EqualsAndHashCode.Include private String aplicacion;
+    @EqualsAndHashCode.Include private String rubro;
+    @EqualsAndHashCode.Include private String marca;
+    @EqualsAndHashCode.Exclude private String info;
+    @EqualsAndHashCode.Exclude private String imagen;
     @SerializedName("precio_lista")
-    private BigDecimal precioLista;
-    private String info;
-    private String imagen;
+    @EqualsAndHashCode.Include private BigDecimal precioLista;
     @SerializedName("precio_oferta")
-    private BigDecimal precioOferta;
+    @EqualsAndHashCode.Exclude private BigDecimal precioOferta;
     @SerializedName("fecha_modificado")
-    private Date fechaModificado;
+    @EqualsAndHashCode.Exclude private Date fechaModificado;
     @SerializedName("fecha_agregado")
-    private Date fechaAgregado;
+    @EqualsAndHashCode.Exclude private Date fechaAgregado;
+    @EqualsAndHashCode.Exclude private Integer stock;
 
 }

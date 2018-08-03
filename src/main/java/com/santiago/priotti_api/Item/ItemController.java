@@ -95,7 +95,6 @@ public class ItemController {
         response.type("application/json");
         RequestWrapper wrapper = new RequestWrapper(request);
         try {
-
             if (wrapper.validToken()) {
                 CartRequest cartRequest = new ItemTranslator().translateCart(wrapper.getFullBody());
                 return itemService.cartAddOrRemove(cartRequest);
@@ -149,10 +148,14 @@ public class ItemController {
         try {
             if (wrapper.validToken()) {
                 CartRequest cartRequest = new ItemTranslator().translateCart(wrapper.getFullBody());
-                return itemService.sendOrderEmail(cartRequest);
+                if(itemService.sendOrderEmail(cartRequest)){
+                    return "Pedido enviado!";
+                }
+                response.status(403);
+                return "Error al enviar pedido";
             }
             response.status(403);
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Authentication failed"));
+            return "Error de autenticación";
         } catch (Exception e) {
             e.printStackTrace();
             response.status(400);

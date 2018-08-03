@@ -15,8 +15,8 @@ public class ItemPresenter {
         datatablesItemList = itemList.stream().map(item -> Arrays.asList(
                 item.getCodigo(),
                 item.getAplicacion(),
-                item.getRubro(),
-                item.getMarca()))
+                item.getMarca(),
+                item.getRubro()))
                 .collect(Collectors.toList());
         return new Gson().toJson(datatablesItemList);
     }

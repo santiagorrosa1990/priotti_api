@@ -43,12 +43,12 @@ public class ItemDao extends MySqlConnector {
     private List<Item> select(int limit) throws SQLException {
         Statement st = connect();
         ResultSet rs;
-        rs = st.executeQuery("SELECT * FROM  " + TABLE + " LIMIT " + limit);
+        rs = st.executeQuery("SELECT * FROM  " + TABLE + " ORDER BY marca, codigo LIMIT " + limit);
         List<Item> itemList = new ItemInterpreter().interpret(rs);
         close();
         return itemList;
     }
-// TODO ORDER BY marca, codigo
+
     //UPDATE ALL FROM FILE
 
     public void updateAll(List<Item> updatedList) throws SQLException {
@@ -57,15 +57,12 @@ public class ItemDao extends MySqlConnector {
         AtomicInteger updates = new AtomicInteger(0);
         AtomicInteger inserts = new AtomicInteger(0);
         Map<String, Item> outdatedList = toMap(dbList);
-        Statement st = connect();
+        final Statement st = connect();
         System.out.println("Updating...");
         updatedList.forEach(it -> {
             try {
                 if (outdatedList.containsKey(it.getCodigo())) {
                     if (!outdatedList.get(it.getCodigo()).equals(it)) {
-                        System.out.println(outdatedList.get(it.getCodigo()).equals(it));
-                        System.out.println("New  " + it);
-                        System.out.println("Old  " + outdatedList.get(it.getCodigo()));
                         updates.getAndIncrement();
                         update(it, st);
                     }
@@ -109,10 +106,9 @@ public class ItemDao extends MySqlConnector {
                 "', '" + item.getMarca() +
                 "', " + item.getPrecioLista() + ")";
         st.executeUpdate(query);
-        close();
     }
 
-    //UPDATE
+    //UPDATE ONE ITEM
 
     public void updateOne(Item item) throws SQLException {
         Statement st = connect();

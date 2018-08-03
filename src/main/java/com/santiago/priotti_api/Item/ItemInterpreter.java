@@ -27,6 +27,7 @@ public class ItemInterpreter implements Interpreter<Item> {
                     .precioLista(new BigDecimal(rs.getString("precio_lista").trim()))
                     .precioOferta(new BigDecimal(rs.getString("precio_oferta").trim()))
                     .imagen(rs.getString("imagen").trim())
+                    .stock(Integer.parseInt(rs.getString("stock")))
                     .build());
         }
         return itemList;

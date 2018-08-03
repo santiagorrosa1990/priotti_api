@@ -137,13 +137,13 @@ public class ItemService {
         }
     }
 
-    public String sendOrderEmail(CartRequest cartRequest) {
+    public Boolean sendOrderEmail(CartRequest cartRequest) {
         try {
             List<List<String>> list = itemDao.closeOrder(cartRequest);
             sendMail(buildEmailBody(list, cartRequest.getComments()), cartRequest);
-            return "Sent!";
-        } catch (SQLException ex) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Error: " + ex.getMessage()));
+            return true;
+        } catch (Exception ex) {
+            return false;
         }
     }
 
@@ -168,14 +168,11 @@ public class ItemService {
         sb.append("</body>");
         sb.append("</html>");
 
-        System.out.println(sb.toString());
-
-
         return sb.toString();
 
     }
 
-    private void sendMail(String body, CartRequest request) {
+    private void sendMail(String body, CartRequest request) throws MessagingException {
         //Setting up configurations for the email connection to the Google SMTP server using TLS
 
         Properties props = new Properties();
@@ -239,9 +236,7 @@ public class ItemService {
             System.out.println("Mail has been sent successfully");
 
         } catch (MessagingException mex) {
-
-            System.out.println("Unable to send an email" + mex);
-
+            throw mex;
         }
 
     }

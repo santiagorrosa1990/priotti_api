@@ -63,8 +63,9 @@ public class Router {
         //TODO agregar fechas de actualizacion de lista y oferta
         //TODO validar creacion y edicion de clientes
         //TODO dividir index.js en varios archivos
-
-        //TODO VER QUE MIERDA PASO CON UPDATER (VER HASH DE ITEM)
+        //TODO revisar conexon de base de datos, que no quede nada abierto
+        //TODO al borrar cantidad de un item, se borra del carrito!
+        //TODO ver ordenamiento del render del datatables
 
     }
 
