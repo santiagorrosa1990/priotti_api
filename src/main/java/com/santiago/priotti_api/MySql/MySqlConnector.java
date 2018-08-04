@@ -22,13 +22,19 @@ public class MySqlConnector { //TODO cambiar por algo no estatico o inyectado
 
     protected static Statement connect() throws SQLException {
         properties = new Properties();
-        properties.setProperty("user", "SANTIAGO");
-        properties.setProperty("password", "Santi-911");
+        properties.setProperty("user", "santiago");
+        properties.setProperty("password", "Tato1432");
         properties.setProperty("useSSL", "false");
         properties.setProperty("autoReconnect", "true");
 
+        /*properties = new Properties();
+        properties.setProperty("user", "SANTIAGO");
+        properties.setProperty("password", "Santi-911");
+        properties.setProperty("useSSL", "false");
+        properties.setProperty("autoReconnect", "true");*/
+
         connect = DriverManager
-                .getConnection("jdbc:mysql://localhost/priotti", properties);
+                .getConnection("jdbc:mysql://localhost/db_priotti", properties);
 
         statement = connect.createStatement();
 

@@ -6,9 +6,11 @@
 package com.santiago.priotti_api.Injector;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.TypeLiteral;
-import com.santiago.priotti_api.Interfaces.Translator;
-import com.santiago.priotti_api.Item.*;
+import com.santiago.priotti_api.Cart.CartController;
+import com.santiago.priotti_api.Item.ItemController;
+import com.santiago.priotti_api.Item.ItemDao;
+import com.santiago.priotti_api.Item.ItemService;
+import com.santiago.priotti_api.Item.ItemTranslator;
 import com.santiago.priotti_api.User.UserAuthenticator;
 import com.santiago.priotti_api.User.UserService;
 
@@ -27,6 +29,7 @@ public class ConfigModule extends AbstractModule {
         bind(ItemDao.class);
         bind(ItemTranslator.class);
         bind(UserService.class);
+        bind(CartController.class);
 
     }
 

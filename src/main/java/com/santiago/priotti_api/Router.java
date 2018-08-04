@@ -6,9 +6,11 @@
 package com.santiago.priotti_api;
 
 import com.google.inject.Inject;
+import com.santiago.priotti_api.Cart.CartController;
 import com.santiago.priotti_api.Item.ItemController;
 import com.santiago.priotti_api.User.UserController;
 
+import static spark.Spark.before;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
@@ -20,14 +22,18 @@ public class Router {
 
     private final ItemController itemController;
     private final UserController userController;
+    private final CartController cartController;
 
     @Inject
-    public Router(ItemController itemController, UserController userController) {
+    public Router(ItemController itemController, UserController userController, CartController cartController) {
         this.itemController = itemController;
         this.userController = userController;
+        this.cartController = cartController;
     }
 
     public void launch() {
+
+        before();
 
         get("/item", itemController::getAll);
 
@@ -39,13 +45,13 @@ public class Router {
 
         post("/item/basic", itemController::basic);
 
-        post("/item/updcart", itemController::editCart);
+        post("/item/updcart", cartController::editCart);
 
-        post("/item/getcart", itemController::getCart);
+        post("/item/getcart", cartController::getCart);
 
-        post("/item/carthist", itemController::getOrderHistory);
+        post("/item/carthist", cartController::getOrderHistory);
 
-        post("/item/emailorder", itemController::emailOrder);
+        post("/item/emailorder", cartController::emailOrder);
 
         post("/login", userController::login);
 
@@ -63,9 +69,11 @@ public class Router {
         //TODO agregar fechas de actualizacion de lista y oferta
         //TODO validar creacion y edicion de clientes
         //TODO dividir index.js en varios archivos
-        //TODO revisar conexon de base de datos, que no quede nada abierto
-        //TODO al borrar cantidad de un item, se borra del carrito!
+        //TODO revisar conexion de base de datos, que no quede nada abierto
+        //TODO al borrar cantidad de un item, se borra del carrito
         //TODO ver ordenamiento del render del datatables
+        //TODO ver porque se le pega dos veces a /updcart al agregar o quitar items
+
 
     }
 
