@@ -72,8 +72,7 @@ public class Router {
         //TODO revisar conexion de base de datos, que no quede nada abierto
         //TODO al borrar cantidad de un item, se borra del carrito
         //TODO ver ordenamiento del render del datatables
-        //TODO ver porque se le pega dos veces a /updcart al agregar o quitar items
-
+        //TODO se recarga el item en 0 cuando se vuelve a clickear un producto ya existente
 
     }
 
