@@ -5,17 +5,16 @@
  */
 package com.santiago.priotti_api.Item;
 
-import com.google.gson.Gson;
-import com.santiago.priotti_api.Cart.CartRequest;
 import com.santiago.priotti_api.MySql.MySqlConnector;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 /**
  * @author santiago

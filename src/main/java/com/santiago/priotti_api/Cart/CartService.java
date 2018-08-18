@@ -2,7 +2,6 @@ package com.santiago.priotti_api.Cart;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
-import com.santiago.priotti_api.Item.ItemDao;
 import com.santiago.priotti_api.Item.ItemTranslator;
 import com.santiago.priotti_api.StandardResponse.StandardResponse;
 import com.santiago.priotti_api.StandardResponse.StatusResponse;

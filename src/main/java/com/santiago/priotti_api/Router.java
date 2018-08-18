@@ -10,9 +10,7 @@ import com.santiago.priotti_api.Cart.CartController;
 import com.santiago.priotti_api.Item.ItemController;
 import com.santiago.priotti_api.User.UserController;
 
-import static spark.Spark.before;
-import static spark.Spark.get;
-import static spark.Spark.post;
+import static spark.Spark.*;
 
 /**
  *

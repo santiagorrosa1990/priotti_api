@@ -4,7 +4,6 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.santiago.priotti_api.Interfaces.Translator;
 import com.santiago.priotti_api.Item.Item;
-import spark.Request;
 
 import java.lang.reflect.Type;
 import java.util.List;

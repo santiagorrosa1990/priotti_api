@@ -1,0 +1,11 @@
+{
+  "user": "SANTIAGO",
+  "password": "Santi-911",
+  "useSSL": "false",
+  "autoReconnect": "true",
+  "db_type": "jdbc:mysql://localhost/priotti"
+}
+
+
+
+
