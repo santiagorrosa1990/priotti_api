@@ -20,36 +20,36 @@ public class UserController {
     }
 
     public String login(Request request, Response response) {
-        try{
+        try {
             RequestWrapper wrapper = new RequestWrapper(request);
             response.type("application/json");
             String token = authenticator.buildToken(wrapper.getCredentials());
-            if(token.isEmpty()){
+            if (token.isEmpty()) {
                 response.status(403);
                 return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Invalid credentials"));
             }
             response.type("text");
             return token; //TODO ver tipo de respuesta
-        }catch(Exception e){
+        } catch (Exception e) {
             response.status(400);
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad request: "+e.getMessage()));
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad request: " + e.getMessage()));
         }
     }
 
     public String adminLogin(Request request, Response response) { //TODO SEGUIR
-        try{
+        try {
             RequestWrapper wrapper = new RequestWrapper(request);
             response.type("application/json");
             String token = authenticator.buildAdminToken(wrapper.getCredentials());
-            if(token.isEmpty()){
+            if (token.isEmpty()) {
                 response.status(403);
                 return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Invalid credentials"));
             }
             response.type("text");
             return token; //TODO ver tipo de respuesta
-        }catch(Exception e){
+        } catch (Exception e) {
             response.status(400);
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad request: "+e.getMessage()));
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, "Bad request: " + e.getMessage()));
         }
     }
 

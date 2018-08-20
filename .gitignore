@@ -1,4 +1,4 @@
 target/
 .idea/
 priotti_api.iml
-com/santiago/priotti_api/config.json
+com/santiago/priotti_api/MySql/config.json

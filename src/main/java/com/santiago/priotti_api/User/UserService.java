@@ -49,4 +49,8 @@ public class UserService {
         }
         return "Item actualizado"; //TODO devolver un standard response
     }
+
+    public void addVisit() {
+
+    }
 }

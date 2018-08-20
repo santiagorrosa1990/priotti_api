@@ -71,6 +71,7 @@ public class Router {
         //TODO al borrar cantidad de un item, se borra del carrito
         //TODO ver ordenamiento del render del datatables
         //TODO se recarga el item en 0 cuando se vuelve a clickear un producto ya existente
+        //TODO meter en el token toda la info, que no quede id ni nombre de usuario visible
 
     }
 

@@ -2,13 +2,33 @@ package com.santiago.priotti_api.Utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 
 public class FileReader {
+
+    public String convert_file_to_string_apache_commons(String filename) {
+
+        try {
+            String filePath = new File("").getAbsolutePath();
+            filePath = filePath.concat(filename);
+            File file = new File(filePath);
+            return FileUtils.readFileToString(file);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+
+
+    }
 
     private String getContent(String fileName) throws IOException {
         File file = getFileFromResources(fileName);
@@ -16,7 +36,7 @@ public class FileReader {
     }
 
     private File getFileFromResources(String fileName) {
-        final ClassLoader classLoader =  this.getClass().getClassLoader();
+        final ClassLoader classLoader = this.getClass().getClassLoader();
         return new File(classLoader.getResource(fileName).getFile());
     }
 

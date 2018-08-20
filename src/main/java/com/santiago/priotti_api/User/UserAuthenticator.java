@@ -7,6 +7,8 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.google.inject.Inject;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +23,10 @@ public class UserAuthenticator {
 
     public String buildToken(Credentials credentials) {
         List<User> users = service.get(credentials.getUsername());
-        if (users.size() == 1 && credentials.matches(users.get(0))) return Optional.ofNullable(createToken(users.get(0))).orElse("");
+        if (users.size() == 1 && credentials.matches(users.get(0))) {
+            service.addVisit();
+            return Optional.ofNullable(createToken(users.get(0))).orElse("");
+        }
         return "";
     }
 
@@ -33,9 +38,12 @@ public class UserAuthenticator {
 
     private String createToken(User user){
         try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            String formatDateTime = LocalDateTime.now().format(formatter);
             Algorithm algorithm = Algorithm.HMAC256("RE$$TFDLS");
             return JWT.create()
                     .withIssuer("priotti")
+                    .withClaim("date", formatDateTime)
                     .withClaim("username", user.getName())
                     .withClaim("id", user.getId())
                     .withClaim("co", user.getCoeficient().toString())

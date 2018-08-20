@@ -23,6 +23,9 @@ public class MySqlConnector { //TODO cambiar por algo no estatico o inyectado
     private static Connection connect = null;
     private static Statement statement = null;
     private static Properties properties = null;
+    private static Map<String, String> map = new Gson().fromJson(
+            new FileReader().convert_file_to_string_apache_commons("/src/main/java/com/santiago/priotti_api/MySql/config.json"),
+            Map.class);
 
     protected static Statement connect() throws SQLException {
         /*properties = new Properties();
@@ -31,14 +34,14 @@ public class MySqlConnector { //TODO cambiar por algo no estatico o inyectado
         properties.setProperty("useSSL", "false");
         properties.setProperty("autoReconnect", "true");*/
 
-        String json = new FileReader().getFile("com/santiago/priotti_api/config.json");
-        Map<String, String> map = new Gson().fromJson(json, Map.class);
+        //String json = new FileReader().convert_file_to_string_apache_commons("/src/main/java/com/santiago/priotti_api/MySql/config.json");
+       // Map<String, String> map = new Gson().fromJson(json, Map.class);
 
 
         properties = new Properties();
         properties.setProperty("user", map.get("user"));
         properties.setProperty("password", map.get("password"));
-        properties.setProperty("useSSL", map.get("userSSL"));
+        properties.setProperty("useSSL", map.get("useSSL"));
         properties.setProperty("autoReconnect", map.get("autoReconnect"));
 
         connect = DriverManager
