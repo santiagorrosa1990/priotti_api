@@ -26,7 +26,8 @@ public class ItemService {
 
     private final ItemDao itemDao;
     private final ItemTranslator translator;
-
+//TODO el service deberia devolver listas de POJOs,
+//TODO y el controller llamar al presenter para mostrar los datos como se quiera
     @Inject
     public ItemService(ItemDao itemDao, ItemTranslator translator) {
         this.itemDao = itemDao;
@@ -56,12 +57,12 @@ public class ItemService {
     public String fullSearch(ItemRequest request) {
         Boolean novelty = request.getNovelty();
         Boolean offer = request.getOffer();
-        List keywords = getKeywords(request.getKeywords());
+        List keywords = getKeywordsAsList(request.getKeywords());
         BigDecimal coeficient = request.getCoeficient();
         String query = new ItemQueryBuilder().build(keywords, offer, novelty);
         try {
             List<Item> itemList = itemDao.search(query);
-            return new ItemPresenter().fullTable(itemList, coeficient);
+            return new ItemPresenter().fullTable(itemList, coeficient); //TODO el presenter deberia multiplicar ? No es lógica de negocio?
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -72,7 +73,7 @@ public class ItemService {
     public String basicSearch(ItemRequest request) {
         Boolean novelty = request.getNovelty();
         Boolean offer = request.getOffer();
-        List keywords = getKeywords(request.getKeywords());
+        List keywords = getKeywordsAsList(request.getKeywords());
         String query = new ItemQueryBuilder().build(keywords, offer, novelty);
         try {
             List<Item> itemList = itemDao.search(query);
@@ -102,12 +103,10 @@ public class ItemService {
         }
     }
 
-    private List<String> getKeywords(String search) {
+    private List<String> getKeywordsAsList(String search) {
         String[] words = search.split("\\s+");
         return Arrays.asList(words);
     }
-
-
 
     public Object buildXlsx(Response response, ItemRequest request){
         BigDecimal coeficient = request.getCoeficient();
@@ -137,7 +136,5 @@ public class ItemService {
         System.out.println("Xlsx file created!");
         return response.raw();
     }
-
-
 
 }

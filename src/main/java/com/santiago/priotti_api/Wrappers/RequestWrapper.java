@@ -84,7 +84,7 @@ public class RequestWrapper {
                     .withIssuer("priotti")
                     .build();
             String coeficient = verifier.verify(token).getClaim("co").asString();
-            String tokenDate = verifier.verify(getToken()).getClaim("date").asString();
+            String tokenDate = verifier.verify(token).getClaim("date").asString();
             Map body = Optional.ofNullable(gson.fromJson(request.body(), Map.class)).orElse(new HashMap());
             body.put("coeficient", coeficient); //@Smell ver esto
             this.body = gson.toJson(body);

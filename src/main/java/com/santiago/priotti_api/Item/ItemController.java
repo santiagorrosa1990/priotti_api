@@ -56,7 +56,7 @@ public class ItemController {
         response.type("application/json");
         RequestWrapper wrapper = new RequestWrapper(request);
         try {
-            if (wrapper.validToken()) {
+            if (wrapper.validToken()) { //TODO ver tell dont ask si aplica acá
                 ItemRequest itemRequest = new ItemTranslator().translate(wrapper.getFullBody());
                 return itemService.fullSearch(itemRequest);
             }
@@ -85,7 +85,7 @@ public class ItemController {
     public Object getXlsx(Request request, Response response) {
         RequestWrapper wrapper = new RequestWrapper(request);
         try {
-            if (wrapper.validToken(request.queryParams("tkn"))) {
+            if (wrapper.validToken(request.queryParams("tkn"))) { //TODO porqué hago esto?
                 ItemRequest itemRequest = new ItemTranslator().translate(wrapper.getFullBody());
                 return itemService.buildXlsx(response, itemRequest);
             }

@@ -6,10 +6,7 @@
 package com.santiago.priotti_api.Item;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -21,6 +18,7 @@ import java.util.Date;
 @ToString
 @Getter
 @EqualsAndHashCode
+@Setter
 public class Item {
 
     @EqualsAndHashCode.Include private String codigo;
